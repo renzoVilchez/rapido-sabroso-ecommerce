@@ -4,9 +4,9 @@ import 'swiper/css/autoplay';
 import { Autoplay } from 'swiper/modules';
 
 const banners = [
-  { id: 1, src: 'https://picsum.photos/1200/300?random=1', alt: 'Banner 1' },
-  { id: 2, src: 'https://picsum.photos/1200/300?random=2', alt: 'Banner 2' },
-  { id: 3, src: 'https://picsum.photos/1200/300?random=3', alt: 'Banner 3' },
+  { id: 1, src: 'https://picsum.photos/1200/400?random=1', alt: 'Banner 1' },
+  { id: 2, src: 'https://picsum.photos/1200/400?random=2', alt: 'Banner 2' },
+  { id: 3, src: 'https://picsum.photos/1200/400?random=3', alt: 'Banner 3' },
 ];
 
 function BannerCarousel() {
@@ -21,7 +21,7 @@ function BannerCarousel() {
           <img
             src={banner.src}
             alt={banner.alt}
-            className="w-full h-[300px] object-cover"
+            className="w-full h-[400px] object-cover"
           />
         </SwiperSlide>
       ))}
