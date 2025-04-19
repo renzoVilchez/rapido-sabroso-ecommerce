@@ -3,9 +3,15 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 
-import userRoutes from './routes/userRoutes.js';
-import productRoutes from './routes/productRoutes.js';
-import toppingRoutes from './routes/toppingRoutes.js';
+import productoRoutes from './routes/productoRoutes.js';
+import productoCategoriaRoutes from './routes/productoCategoriaRoutes.js';
+import tipoProductoRoutes from './routes/tipoProductoRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import categoriaRoutes from './routes/categoriaRoutes.js';
+import clienteRoutes from './routes/clienteRoutes.js';
+import comprobanteRoutes from './routes/comprobanteRoutes.js';
+import detallePedidoRoutes from './routes/detallePedidoRoutes.js';
+import pedidoRoutes from './routes/pedidoRoutes.js';
 
 import path from 'path';
 const __dirname = path.resolve();
@@ -16,9 +22,15 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
-app.use('/api/users', userRoutes);
-app.use('/api/hamburguesas', productRoutes);
-app.use('/api/toppings', toppingRoutes);
+app.use('/api/productos', productoRoutes);
+app.use('/api/producto-categoria', productoCategoriaRoutes);
+app.use('/api/tipo-producto', tipoProductoRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/categoria', categoriaRoutes);
+app.use('/api/cliente', clienteRoutes);
+app.use('/api/comprobante', comprobanteRoutes);
+app.use('/api/detalle-pedido', detallePedidoRoutes);
+app.use('/api/pedido', pedidoRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

@@ -1,15 +1,13 @@
 import BannerCarousel from '../components/BannerCarousel';
-import MenuInfo from '../components/MenuInfo';
-import TipoCarousel from '../components/TipoCarousel';
-import ToppingsCarousel from '../components/ToppingsCarousel';
+import HomeInfo from '../components/HomeInfo';
+import TipoCategoriasCarousel from "../components/TipoCategoriasCarousel";
 
 function Home() {
   return (
     <>
       <BannerCarousel />
-      <MenuInfo />
-      <TipoCarousel />
-      <ToppingsCarousel />
+      <HomeInfo />
+      <TipoCategoriasCarousel />
     </>
   );
 }
