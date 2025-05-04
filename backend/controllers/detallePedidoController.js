@@ -29,10 +29,11 @@ const detallePedidoController = {
   // Crear un nuevo detalle de pedido
   create: async (req, res) => {
     try {
-      const { idPedido, idProducto, cantidad, precio } = req.body;
-      const nuevoDetalle = await DetallePedido.create(idPedido, idProducto, cantidad, precio);
+      const { idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido } = req.body;
+      const subtotalDetallePedido = cantidadDetallePedido * precioUnitarioDetallePedido; // Calculamos el subtotal
+      const nuevoDetalle = await DetallePedido.create(idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido);
       res.status(201).json(nuevoDetalle);
-    } catch {
+    } catch (err) {
       res.status(500).json({ error: 'Error al crear detalle de pedido' });
     }
   },
@@ -41,8 +42,9 @@ const detallePedidoController = {
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const { idPedido, idProducto, cantidad, precio } = req.body;
-      const actualizado = await DetallePedido.update(id, idPedido, idProducto, cantidad, precio);
+      const { idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido } = req.body;
+      const subtotalDetallePedido = cantidadDetallePedido * precioUnitarioDetallePedido; // Calculamos el subtotal
+      const actualizado = await DetallePedido.update(id, idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido);
       if (actualizado) {
         res.json(actualizado);
       } else {

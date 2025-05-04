@@ -14,28 +14,69 @@ const Pedido = {
   },
 
   // Crear un nuevo pedido
-  create: async (idCliente, fechaPedido, total, estado) => {
-    const [result] = await db.execute(
-      'INSERT INTO pedido (idCliente, fechaPedido, total, estado) VALUES (?, ?, ?, ?)',
-      [idCliente, fechaPedido, total, estado]
-    );
-    return {
-      idPedido: result.insertId,
-      idCliente,
-      fechaPedido,
-      total,
-      estado
-    };
+  create: async (idCliente, fechaPedido, productos, puntosGanados = 0, puntosUsados = 0) => {
+    const connection = await db.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      // Calcular el total del pedido
+      let totalPedido = 0;
+      for (const producto of productos) {
+        totalPedido += producto.precioProducto * producto.cantidad;
+      }
+
+      // Aplicar puntos usados
+      totalPedido = Math.max(0, totalPedido - puntosUsados);
+
+      // Insertar en tabla pedido
+      const [pedidoResult] = await connection.execute(
+        'INSERT INTO pedido (idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados) VALUES (?, ?, ?, ?, ?)',
+        [idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados]
+      );
+      const idPedido = pedidoResult.insertId;
+
+      // Insertar en tabla detalle_pedido
+      if (productos && productos.length > 0) {
+        for (const producto of productos) {
+          const cantidadDetallePedido = producto.cantidad;
+          const precioUnitarioDetallePedido = producto.precioProducto;
+          const subtotalDetallePedido = cantidadDetallePedido * precioUnitarioDetallePedido;
+
+          await connection.execute(
+            `INSERT INTO detalle_pedido (idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido)
+             VALUES (?, ?, ?, ?, ?)`,
+            [idPedido, producto.idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido]
+          );
+        }
+      }
+
+      await connection.commit();
+
+      return {
+        idPedido,
+        idCliente,
+        fechaPedido,
+        totalPedido,
+        puntosGanados,
+        puntosUsados
+      };
+    } catch (error) {
+      await connection.rollback();
+      console.error('Error al crear pedido:', error);
+      throw new Error('Error al crear el pedido');
+    } finally {
+      connection.release();
+    }
   },
 
   // Actualizar un pedido
-  update: async (id, idCliente, fechaPedido, total, estado) => {
+  update: async (id, idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados) => {
     const [result] = await db.execute(
-      'UPDATE pedido SET idCliente = ?, fechaPedido = ?, total = ?, estado = ? WHERE idPedido = ?',
-      [idCliente, fechaPedido, total, estado, id]
+      'UPDATE pedido SET idCliente = ?, fechaPedido = ?, totalPedido = ?, puntosGanados = ?, puntosUsados = ? WHERE idPedido = ?',
+      [idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados, id]
     );
     return result.affectedRows > 0
-      ? { idPedido: id, idCliente, fechaPedido, total, estado }
+      ? { idPedido: id, idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados }
       : null;
   },
 

@@ -22,15 +22,16 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/images', express.static(path.join(__dirname, 'public/images')));
+
 app.use('/api/productos', productoRoutes);
-app.use('/api/producto-categoria', productoCategoriaRoutes);
-app.use('/api/tipo-producto', tipoProductoRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/categoria', categoriaRoutes);
-app.use('/api/cliente', clienteRoutes);
-app.use('/api/comprobante', comprobanteRoutes);
-app.use('/api/detalle-pedido', detallePedidoRoutes);
-app.use('/api/pedido', pedidoRoutes);
+app.use('/api/producto-categorias', productoCategoriaRoutes);
+app.use('/api/tipos-producto', tipoProductoRoutes);
+app.use('/api/admins', adminRoutes);
+app.use('/api/categorias', categoriaRoutes);
+app.use('/api/clientes', clienteRoutes);
+app.use('/api/comprobantes', comprobanteRoutes);
+app.use('/api/detalles-pedido', detallePedidoRoutes);
+app.use('/api/pedidos', pedidoRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

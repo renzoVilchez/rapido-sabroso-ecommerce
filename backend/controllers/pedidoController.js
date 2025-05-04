@@ -21,7 +21,7 @@ const pedidoController = {
       } else {
         res.status(404).json({ error: 'Pedido no encontrado' });
       }
-    } catch {
+    } catch (err) {
       res.status(500).json({ error: 'Error al obtener pedido' });
     }
   },
@@ -29,10 +29,16 @@ const pedidoController = {
   // Crear un nuevo pedido
   create: async (req, res) => {
     try {
-      const { idCliente, fechaPedido, total, estado } = req.body;
-      const nuevoPedido = await Pedido.create(idCliente, fechaPedido, total, estado);
+      const { idCliente, fechaPedido, productos, puntosGanados, puntosUsados } = req.body;
+
+      // Si no se proporcionan puntos ganados y puntos usados, asignarles valores por defecto
+      const puntosGanadosDef = puntosGanados || 0;
+      const puntosUsadosDef = puntosUsados || 0;
+
+      const nuevoPedido = await Pedido.create(idCliente, fechaPedido, productos, puntosGanadosDef, puntosUsadosDef);
       res.status(201).json(nuevoPedido);
-    } catch {
+    } catch (err) {
+      console.error(err);
       res.status(500).json({ error: 'Error al crear pedido' });
     }
   },
@@ -41,14 +47,15 @@ const pedidoController = {
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const { idCliente, fechaPedido, total, estado } = req.body;
-      const actualizado = await Pedido.update(id, idCliente, fechaPedido, total, estado);
+      const { idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados } = req.body;
+
+      const actualizado = await Pedido.update(id, idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados);
       if (actualizado) {
         res.json(actualizado);
       } else {
         res.status(404).json({ error: 'Pedido no encontrado' });
       }
-    } catch {
+    } catch (err) {
       res.status(500).json({ error: 'Error al actualizar pedido' });
     }
   },
@@ -63,7 +70,7 @@ const pedidoController = {
       } else {
         res.status(404).json({ error: 'Pedido no encontrado' });
       }
-    } catch {
+    } catch (err) {
       res.status(500).json({ error: 'Error al eliminar pedido' });
     }
   },

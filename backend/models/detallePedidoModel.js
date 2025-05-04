@@ -13,29 +13,35 @@ const DetallePedido = {
     return rows[0];
   },
 
-  // Crear un nuevo detalle de pedido
-  create: async (idPedido, idProducto, cantidad, precio) => {
+  create: async (idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido) => {
+    const subtotalDetallePedido = cantidadDetallePedido * precioUnitarioDetallePedido; // Calculamos el subtotal
+
     const [result] = await db.execute(
-      'INSERT INTO detalle_pedido (idPedido, idProducto, cantidad, precio) VALUES (?, ?, ?, ?)',
-      [idPedido, idProducto, cantidad, precio]
+      `INSERT INTO detalle_pedido 
+        (idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido) 
+        VALUES (?, ?, ?, ?, ?)`,
+      [idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido]
     );
+
     return {
       idDetallePedido: result.insertId,
       idPedido,
       idProducto,
-      cantidad,
-      precio
+      cantidadDetallePedido,
+      precioUnitarioDetallePedido,
+      subtotalDetallePedido
     };
   },
 
   // Actualizar un detalle de pedido
-  update: async (id, idPedido, idProducto, cantidad, precio) => {
+  update: async (id, idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido) => {
+    const subtotalDetallePedido = cantidadDetallePedido * precioUnitarioDetallePedido; // Calculamos el subtotal
     const [result] = await db.execute(
-      'UPDATE detalle_pedido SET idPedido = ?, idProducto = ?, cantidad = ?, precio = ? WHERE idDetallePedido = ?',
-      [idPedido, idProducto, cantidad, precio, id]
+      'UPDATE detalle_pedido SET idPedido = ?, idProducto = ?, cantidadDetallePedido = ?, precioUnitarioDetallePedido = ?, subtotalDetallePedido = ? WHERE idDetallePedido = ?',
+      [idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido, id]
     );
     return result.affectedRows > 0
-      ? { idDetallePedido: id, idPedido, idProducto, cantidad, precio }
+      ? { idDetallePedido: id, idPedido, idProducto, cantidadDetallePedido, precioUnitarioDetallePedido, subtotalDetallePedido }
       : null;
   },
 

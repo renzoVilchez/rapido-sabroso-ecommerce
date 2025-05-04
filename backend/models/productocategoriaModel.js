@@ -31,13 +31,13 @@ const ProductoCategoria = {
     return rows[0];
   },
 
-  // Obtener categorías agrupadas por tipo sin agrupar los datos
   getCategoriasPorTipo: async () => {
     try {
       const [rows] = await db.execute(`
         SELECT 
           tp.nombreTipoProducto AS tipoProducto, 
-          c.nombreCategoria AS nombreCategoria
+          c.nombreCategoria AS nombreCategoria,
+          c.imagenCategoria
         FROM producto_categoria pc
         JOIN producto p ON pc.idProducto = p.idProducto
         JOIN tipo_producto tp ON p.idTipoProducto = tp.idTipoProducto
@@ -51,17 +51,22 @@ const ProductoCategoria = {
       rows.forEach(row => {
         const tipo = row.tipoProducto;
         const categoria = row.nombreCategoria;
+        const imagen = row.imagenCategoria;
   
         if (!agrupado[tipo]) {
-          agrupado[tipo] = new Set();
+          agrupado[tipo] = [];
         }
-        agrupado[tipo].add(categoria); // evitar duplicados
+  
+        // Verificar si la categoría ya existe para no duplicarla
+        if (!agrupado[tipo].some(c => c.nombreCategoria === categoria)) {
+          agrupado[tipo].push({ nombreCategoria: categoria, imagenCategoria: imagen });
+        }
       });
   
       // Convertir a formato de array
-      const resultado = Object.entries(agrupado).map(([tipoProducto, categoriasSet]) => ({
+      const resultado = Object.entries(agrupado).map(([tipoProducto, categorias]) => ({
         tipoProducto,
-        categorias: Array.from(categoriasSet)
+        categorias
       }));
   
       return resultado;
@@ -69,7 +74,7 @@ const ProductoCategoria = {
       console.error('Error al obtener categorías por tipo:', error);
       throw error;
     }
-  },
+  },  
 
   // Crear una nueva relación entre producto y categoría
   create: async (idProducto, idCategoria) => {

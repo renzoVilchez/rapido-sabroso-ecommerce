@@ -1,135 +1,72 @@
 import { Link } from 'react-router-dom';
-import RotatingCard from '../../components/RotatingCard';
-import AnthonyImage from '../../assets/images/Anthony.jpg';
-import KatterynImage from '../../assets/images/Katteryn.jpg';
-import RichardImage from '../../assets/images/Richard.jpg';
-import RenzoImage from '../../assets/images/Renzo.jpg';
+import { Target, Eye, ListChecks, HeartHandshake } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const cards = [
-    {
-        image: RenzoImage,
-        title: 'Renzo Vilchez',
-        role: 'Administrador del Proyecto',
-        birthPlace: 'El Porvenir, Trujillo',
-        birthDate: '29/06/2005',
-        studyCenter: 'Instituto Educativo Superior Tecnologico Publico "Trujillo" ',
-        technologies: {
-            graphicDesign: ['Adobe Illustrator'],
-            videoEditing: ['Capcut'],
-            webDevelopment: [
-                'HTML',
-                'CSS',
-                'JavaScript',
-                'React',
-                'Tailwind',
-                'Bootstrap',
-                'Node.js',
-            ]
-        }
-    },
-    {
-        image: AnthonyImage,
-        title: 'Anthony Herrera',
-        role: 'Programador del Proyecto',
-        birthPlace: 'Trujillo, Trujillo',
-        birthDate: '01/11/1999',
-        studyCenter: 'Instituto Educativo Superior Tecnologico Publico "Trujillo" ',
-        technologies: {
-            graphicDesign: ['Corel Draw', 'Adobe Illustrator', 'PhotoShop',],
-            videoEditing: ['Capcut'],
-            webDevelopment: [
-                'HTML',
-                'CSS',
-                'JavaScript',
-                'PHP',
-                'Bootstrap'
-            ]
-        }
-    },
-    {
-        image: KatterynImage,
-        title: 'Katteryn Pomaina',
-        role: 'Diseñadora del Proyecto',
-        birthPlace: 'La Esperanza, Trujillo',
-        birthDate: '14/05/2006',
-        studyCenter: 'Instituto Educativo Superior Tecnologico Publico "Trujillo" ',
-        technologies: {
-            graphicDesign: ['Corel DRAW', 'Adobe Illustrator', 'Adobe Photoshop'],
-            videoEditing: ['Capcut'],
-            webDevelopment: [
-                'HTML',
-                'CSS',
-                'React',
-                'PHP',
-                'Bootstrap',
-            ]
-        }
-    },
-    {
-        image: RichardImage,
-        title: 'Richard Terrones',
-        role: 'Tester del Proyecto',
-        birthPlace: 'Trujillo, Trujillo',
-        birthDate: '13/10/2002',
-        studyCenter: 'Instituto Educativo Superior Tecnologico Publico "Trujillo" ',
-        technologies: {
-            graphicDesign: ['Adobe Illustrator'],
-            videoEditing: ['Capcut'],
-            webDevelopment: [
-                'HTML',
-                'CSS',
-                'JavaScript',
-            ]
-        }
-    },
+const sections = [
+  { path: 'mision',     label: 'Misión',     icon: <Target className="w-8 h-8 mb-2 text-[#5C3D2E]" /> },
+  { path: 'vision',     label: 'Visión',     icon: <Eye    className="w-8 h-8 mb-2 text-[#5C3D2E]" /> },
+  { path: 'objetivos',  label: 'Objetivos',  icon: <ListChecks className="w-8 h-8 mb-2 text-[#5C3D2E]" /> },
+  { path: 'valores',    label: 'Valores',    icon: <HeartHandshake className="w-8 h-8 mb-2 text-[#5C3D2E]" /> },
 ];
 
 function Nosotros() {
-    return (
-        <div className="container mx-auto">
-            <header className="flex justify-center flex-col items-center mb-2">
-                <h2 className="text-3xl font-bold text-black ">Nosotros</h2>
-                <p className="mt-4 text-lg">Conoce más sobre quiénes somos, nuestra misión, visión, objetivos y valores.</p>
-            </header>
+  return (
+    <div className="bg-[#FFF8DC] min-h-screen py-10 px-4">
+      <div className="container mx-auto">
 
-            <div className="p-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-items-center">
-                    {cards.map((card, index) => (
-                        <RotatingCard
-                            key={index}
-                            image={card.image}
-                            title={card.title}
-                            role={card.role}
-                            birthPlace={card.birthPlace}
-                            birthDate={card.birthDate}
-                            studyCenter={card.studyCenter}
-                            technologies={card.technologies}
-                        />
-                    ))}
+        {/* 🎬 Header con animación única */}
+        <motion.header
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col items-center text-center mb-12 z-10"
+        >
+          <h2 className="text-4xl font-bold text-yellow-600">Nosotros</h2>
+          <p className="mt-4 text-lg font-medium text-gray-800 max-w-2xl">
+            Conoce más sobre quiénes somos, nuestra misión, visión, objetivos y valores.
+          </p>
+        </motion.header>
 
-                </div>
-            </div>
-
-            <div className="flex justify-center gap-20">
-                <div className="text-center">
-                    <Link to="/nosotros/mision" className="text-xl text-blue-900 border border-red-500 px-6 py-3 rounded-xl shadow-lg shadow-red-500 hover:bg-red-100">Misión</Link>
-                </div>
-                <div className="text-center">
-                    <Link to="/nosotros/vision" className="text-xl text-blue-900 border border-red-500 px-6 py-3 rounded-xl shadow-lg shadow-red-500 hover:bg-red-100">Visión</Link>
-                </div>
-                <div className="text-center">
-                    <Link to="/nosotros/objetivos" className="text-xl text-blue-900 border border-red-500 px-6 py-3 rounded-xl shadow-lg shadow-red-500 hover:bg-red-100">Objetivos</Link>
-                </div>
-                <div className="text-center">
-                    <Link to="/nosotros/valores" className="text-xl text-blue-900 border border-red-500 px-6 py-3 rounded-xl shadow-lg shadow-red-500 hover:bg-red-100">Valores</Link>
-                </div>
-            </div>
-
-            <div className="mt-12">
-                <p className="text-lg">En <strong>Rápido y Sabroso</strong>, trabajamos con pasión y compromiso para ofrecerte lo mejor de la comida rápida. Conoce más sobre lo que nos motiva a brindar un excelente servicio.</p>
-            </div>
+        {/* 🃏 Tarjetas animadas al hacer scroll */}
+        <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-16 px-4">
+          {sections.map(({ path, label, icon }, index) => (
+            <motion.div
+              key={path}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ delay: index * 0.2, duration: 0.5 }}
+              className="w-full"
+            >
+              <Link
+                to={`/nosotros/${path}`}
+                className="block w-full bg-[#FDD835] text-[#5C3D2E] p-6 rounded-2xl shadow-lg text-center transform hover:scale-105 hover:bg-[#A67C52] hover:text-white transition duration-300"
+              >
+                {icon}
+                <h3 className="text-xl font-semibold">{label}</h3>
+              </Link>
+            </motion.div>
+          ))}
         </div>
-    );
+
+        {/* 📜 Texto final */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.7 }}
+          className="text-center z-10"
+        >
+          <p className="text-lg text-gray-800 max-w-3xl mx-auto">
+            En <strong className="text-[#5C3D2E]">Rápido y Sabroso</strong>, trabajamos con pasión y compromiso
+            para ofrecerte lo mejor de la comida rápida. Descubre qué nos motiva y por qué somos tu mejor opción.
+          </p>
+        </motion.div>
+
+      </div>
+    </div>
+  );
 }
 
 export default Nosotros;

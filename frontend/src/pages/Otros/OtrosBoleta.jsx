@@ -1,9 +1,16 @@
-function OtrosBoleta () {
+import BoletaImg from '../../assets/images/boleta.jfif';
+
+function OtrosFactura() {
     return (
-        <div>
-            <h1>OtrosBoleta</h1>
+        <div className="max-w-3xl mx-auto px-4 py-8">
+            <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Diseño de Boleta</h1>
+            <img 
+                src={BoletaImg} 
+                alt="Factura"
+                className="w-full rounded shadow-md"
+            />
         </div>
     );
 }
 
-export default OtrosBoleta
+export default OtrosFactura;

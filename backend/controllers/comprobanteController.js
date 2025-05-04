@@ -1,6 +1,7 @@
 import Comprobante from '../models/comprobanteModel.js';
 
 const comprobanteController = {
+  // Obtener todos los comprobantes
   getAll: async (req, res) => {
     try {
       const comprobantes = await Comprobante.getAll();
@@ -10,6 +11,7 @@ const comprobanteController = {
     }
   },
 
+  // Obtener un comprobante por ID
   getById: async (req, res) => {
     try {
       const { id } = req.params;
@@ -24,21 +26,50 @@ const comprobanteController = {
     }
   },
 
+  // Crear un nuevo comprobante
   create: async (req, res) => {
     try {
-      const { idCliente, idPedido, total, tipoComprobante } = req.body;
-      const nuevoComprobante = await Comprobante.create(idCliente, idPedido, total, tipoComprobante);
+      const {
+        idPedido,
+        tipoComprobante,
+        dniComprobante,
+        rucComprobante,
+        razonSocialComprobante,
+        direccionFiscalComprobante
+      } = req.body;
+  
+      const nuevoComprobante = await Comprobante.create(
+        idPedido,
+        tipoComprobante,
+        dniComprobante,
+        rucComprobante,
+        razonSocialComprobante,
+        direccionFiscalComprobante
+      );
+  
       res.status(201).json(nuevoComprobante);
-    } catch {
+    } catch (error) {
+      console.error('Error al generar comprobante:', error);
       res.status(500).json({ error: 'Error al generar comprobante' });
     }
-  },
+  },  
 
+  // Actualizar un comprobante
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const { idCliente, idPedido, total, tipoComprobante } = req.body;
-      const actualizado = await Comprobante.update(id, idCliente, idPedido, total, tipoComprobante);
+      const { idCliente, idPedido, total, tipoComprobante, dniComprobante, rucComprobante, razonSocialComprobante, direccionFiscalComprobante } = req.body;
+      const actualizado = await Comprobante.update(
+        id, 
+        idCliente, 
+        idPedido, 
+        total, 
+        tipoComprobante, 
+        dniComprobante, 
+        rucComprobante, 
+        razonSocialComprobante, 
+        direccionFiscalComprobante
+      );
       if (actualizado) {
         res.json(actualizado);
       } else {
@@ -49,6 +80,7 @@ const comprobanteController = {
     }
   },
 
+  // Eliminar un comprobante
   delete: async (req, res) => {
     try {
       const { id } = req.params;
