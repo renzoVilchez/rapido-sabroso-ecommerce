@@ -79,13 +79,13 @@ function Navbar() {
           {isLoggedIn ? (
             <button
               onClick={handleLogout}
-              className="bg-yellow-500 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-yellow-600 hover:scale-105 transition duration-300"
+              className="bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-red-700 hover:scale-105 transition duration-300"
             >
               Cerrar sesión
             </button>
           ) : (
             <Link to="/login">
-              <button className="bg-yellow-500 text-gray-700 text-sm font-semibold px-4 py-2 rounded-md hover:bg-yellow-600 hover:scale-105 transition duration-300">
+              <button className="bg-yellow-500 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-yellow-600 hover:scale-105 transition duration-300">
                 Iniciar sesión
               </button>
             </Link>
@@ -109,20 +109,6 @@ function Navbar() {
           <Link to="/otros" onClick={toggleMenu}>Otros</Link>
           <Link to="/carrito" onClick={toggleMenu}>Carrito</Link>
 
-          {isLoggedIn ? (
-            <button
-              onClick={() => { handleLogout(); toggleMenu(); }}
-              className="bg-yellow-500 text-white text-sm font-semibold px-4 py-2 rounded-md hover:bg-yellow-600 hover:scale-105 transition duration-300 mx-auto"
-            >
-              Cerrar sesión
-            </button>
-          ) : (
-            <Link to="/login" onClick={toggleMenu}>
-              <button className="bg-yellow-500 text-gray-700 text-sm font-semibold px-4 py-2 rounded-md hover:bg-yellow-600 hover:scale-105 transition duration-300 mx-auto">
-                Iniciar sesión
-              </button>
-            </Link>
-          )}
         </div>
       )}
     </nav>

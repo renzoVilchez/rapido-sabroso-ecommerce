@@ -1,6 +1,17 @@
 import { Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Layout from './components/Layout';
+import AdminLayout from './pages/Admin/AdminLayout';
+
+import Dashboard from './pages/Admin/Dashboard';
+import Productos from './pages/Admin/Productos';
+import CategoriasProductos from './pages/Admin/CategoriasProductos';
+import TiposProductos from './pages/Admin/TiposProductos';
+import Pedidos from './pages/Admin/Pedidos';
+import Clientes from './pages/Admin/Clientes';
+import Admins from './pages/Admin/Administradores';
+import Reportes from './pages/Admin/Reportes';
+import Ajustes from './pages/Admin/Ajustes';
 
 import Home from './pages/Home';
 import Menu from './pages/Menu';
@@ -38,7 +49,21 @@ function App() {
       {/* Landing fuera del layout */}
       <Route path="/" element={<LandingPage />} />
 
-      {/* Todo lo demás dentro del layout */}
+    {/* Rutas con Layout Admin*/}
+    <Route path="/admin/" element={<Login />} />
+    <Route element={<AdminLayout />}>
+      <Route path="/admin/dashboard" element={<Dashboard />} />
+      <Route path="/admin/productos" element={<Productos />} />
+      <Route path="/admin/categoriasProductos" element={<CategoriasProductos />} />
+      <Route path="/admin/tiposProductos" element={<TiposProductos />} />
+      <Route path="/admin/pedidos" element={<Pedidos />} />
+      <Route path="/admin/clientes" element={<Clientes />} />
+      <Route path="/admin/Admins" element={<Admins />} />
+      <Route path="/admin/reportes" element={<Reportes />} />
+      <Route path="/admin/ajustes" element={<Ajustes />} />
+      <Route path="/admin/*" element={<NotFound />} />
+    </Route>
+      {/* Rutas con Layout Cliente */}
       <Route element={<Layout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/menu" element={<Menu />} />
@@ -73,7 +98,7 @@ function App() {
         <Route path="/otros/logos" element={<OtrosLogos />} />
 
         <Route path="/login" element={<Login />} />
-        <Route path='/register' element={<Register />} />
+        <Route path="/register" element={<Register />} />
 
         <Route path="/pago" element={<Pago />} />
 

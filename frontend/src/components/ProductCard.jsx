@@ -1,11 +1,13 @@
 function ProductCard({ producto, onAgregarAlCarrito }) {
-  const imagen = producto.productImage || 'https://placehold.co/300x300.png';
+  const urlImagen = producto.imagenProducto
+  ? `http://localhost:5000/images/${producto.imagenProducto}`
+  : 'https://placehold.co/300x200.png';
 
   return (
     <div className="flex flex-col h-full bg-white rounded-2xl shadow-md p-4 text-center transition-transform hover:scale-105">
       {/* Imagen del producto */}
       <img
-        src={imagen}
+        src={urlImagen}
         alt={producto.nombreProducto}
         className="w-full h-40 object-cover mb-4 rounded-lg"
       />

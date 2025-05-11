@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const NavbarLanding = () => {
   return (
-    <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center">
+    <nav className="bg-white shadow-md px-6 py-4 flex justify-between items-center relative z-10">
       <div className="text-2xl font-bold text-yellow-600">
         Rápido y Sabroso
       </div>

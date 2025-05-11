@@ -3,6 +3,7 @@ import FooterLanding from '../../components/FooterLanding';
 import { Link } from 'react-router-dom';
 import './LandingPage.css';
 import { Typewriter } from 'react-simple-typewriter';
+import hamburguesaLanding from '../../assets/images/hamburguesaLanding.png';
 
 const LandingPage = () => {
   return (
@@ -34,7 +35,9 @@ const LandingPage = () => {
                 delaySpeed={1200}
               />
             </h1>
-
+            <div className="relative z-10">
+              <img src={hamburguesaLanding} alt="Hamburguesa" className="w-72" />
+            </div>
             <p className="text-xl max-w-2xl text-gray-700 mb-4">
               Disfruta de hamburguesas deliciosas, bebidas refrescantes y un sistema de pedidos rápido y sencillo.
             </p>
@@ -44,7 +47,6 @@ const LandingPage = () => {
             >
               Ver menú
             </Link>
-            <img src="/burger-hero.png" alt="Hamburguesa" className="w-72 mt-10" />
           </div>
 
           {/* Burbujas animadas */}

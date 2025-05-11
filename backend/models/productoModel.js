@@ -5,7 +5,7 @@ const Producto = {
     // Obtener todos los productos
     getAll: async () => {
         const [rows] = await db.execute(`
-            SELECT p.idProducto, p.nombreProducto, p.descripcionProducto, p.precioProducto, p.stockProducto, tp.nombreTipoProducto AS tipoProducto, c.nombreCategoria AS categoriaProducto 
+            SELECT p.idProducto, p.nombreProducto, p.descripcionProducto, p.precioProducto, p.stockProducto, p.imagenProducto , tp.nombreTipoProducto AS tipoProducto, c.nombreCategoria AS categoriaProducto 
             FROM producto p
             JOIN tipo_producto tp ON p.idTipoProducto = tp.idTipoProducto 
             LEFT JOIN producto_categoria pc ON p.idProducto = pc.idProducto 

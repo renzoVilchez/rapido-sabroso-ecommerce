@@ -6,27 +6,26 @@ import { GlobalContext } from '../context/GlobalContext';
 
 function Menu() {
   const [productos, setProductos] = useState([]);
+  const [error, setError] = useState(null);
   const { cartItemCount, setCartItemCount } = useContext(GlobalContext);
-
   const hasLoadedLocalStorage = useRef(false);
 
-  // Cargar productos desde el backend y el carrito desde localStorage
   useEffect(() => {
     if (!hasLoadedLocalStorage.current) {
-      // Cargar carrito desde localStorage
       const carritoGuardado = JSON.parse(localStorage.getItem('carrito')) || [];
       const totalCarrito = carritoGuardado.reduce((acc, item) => acc + item.cantidad, 0);
       setCartItemCount(totalCarrito);
       hasLoadedLocalStorage.current = true;
     }
 
-    // Obtener productos desde el backend
     axios.get('http://localhost:5000/api/productos')
       .then(response => setProductos(response.data))
-      .catch(error => console.error('Hubo un error al obtener los productos:', error));
+      .catch(error => {
+        console.error('Hubo un error al obtener los productos:', error);
+        setError('No se pudo cargar el menú. Intenta nuevamente más tarde.');
+      });
   }, [setCartItemCount]);
 
-  // Agrupar productos por tipo y categoría
   const groupByTypeAndCategory = (items) => {
     return items.reduce((acc, item) => {
       const type = item.tipoProducto || 'Otros';
@@ -42,7 +41,6 @@ function Menu() {
 
   const groupedProductos = groupByTypeAndCategory(productos);
 
-  // Función para agregar producto al carrito
   const agregarAlCarrito = (producto) => {
     const carritoActual = JSON.parse(localStorage.getItem('carrito')) || [];
     const existe = carritoActual.find(p => p.idProducto === producto.idProducto);
@@ -58,10 +56,8 @@ function Menu() {
       nuevoCarrito = [...carritoActual, { ...producto, cantidad: 1 }];
     }
 
-    // Guardar carrito actualizado en localStorage
     localStorage.setItem('carrito', JSON.stringify(nuevoCarrito));
 
-    // Actualizar el contador global del carrito
     const total = nuevoCarrito.reduce((acc, item) => acc + item.cantidad, 0);
     setCartItemCount(total);
   };
@@ -69,6 +65,12 @@ function Menu() {
   return (
     <div className="bg-white min-h-screen p-6">
       <h1 className="text-3xl font-bold mb-8 text-center text-yellow-600">Menú</h1>
+
+      {error && (
+        <div className="bg-red-100 text-red-700 border border-red-300 p-4 rounded-lg text-center font-semibold mb-6">
+          {error}
+        </div>
+      )}
 
       {Object.entries(groupedProductos).map(([tipo, categorias]) => (
         <div key={tipo}>
