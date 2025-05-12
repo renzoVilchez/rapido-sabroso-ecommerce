@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './LandingPage.css';
 import { Typewriter } from 'react-simple-typewriter';
 import hamburguesaLanding from '../../assets/images/hamburguesaLanding.png';
+import { Timer, Leaf, Gift } from "lucide-react";
 
 const LandingPage = () => {
   return (
@@ -64,17 +65,17 @@ const LandingPage = () => {
         <h2 className="text-3xl font-bold mb-8">¿Por qué elegirnos?</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-yellow-50 p-6 rounded-xl shadow">
-            <img src="/icons/fast.svg" alt="Rápido" className="w-12 mx-auto mb-4" />
+            <Timer size={50} className="w-12 mx-auto mb-4"/>
             <h3 className="text-xl font-semibold mb-2">Pedidos Rápidos</h3>
             <p>Tu pedido estará listo en minutos. ¡Rápido y sin complicaciones!</p>
           </div>
           <div className="bg-yellow-50 p-6 rounded-xl shadow">
-            <img src="/icons/fresh.svg" alt="Fresco" className="w-12 mx-auto mb-4" />
+            <Leaf size={50} className="w-12 mx-auto mb-4"/>
             <h3 className="text-xl font-semibold mb-2">Ingredientes Frescos</h3>
             <p>Usamos solo los mejores ingredientes para que disfrutes al máximo.</p>
           </div>
           <div className="bg-yellow-50 p-6 rounded-xl shadow">
-            <img src="/icons/reward.svg" alt="Recompensas" className="w-12 mx-auto mb-4" />
+            <Gift size={50} className="w-12 mx-auto mb-4"/>
             <h3 className="text-xl font-semibold mb-2">Sistema de Recompensas</h3>
             <p>Gana puntos con cada compra y obtén descuentos especiales.</p>
           </div>
@@ -85,9 +86,9 @@ const LandingPage = () => {
       <section className="py-16 px-8 bg-yellow-50 text-center">
         <h2 className="text-3xl font-bold mb-8">Nuestras Estrellas</h2>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {['Clásica', 'BBQ Doble', 'Pollo Crocante', 'Veggie'].map((name, i) => (
+          {['Clasica', 'BBQ', 'Picante', 'Hawaina'].map((name, i) => (
             <div key={i} className="bg-white p-4 rounded-xl shadow">
-              <img src={`/menu/${name.toLowerCase().replace(/ /g, '-')}.png`} alt={name} className="w-full h-40 object-cover mb-4 rounded" />
+              <img src={`http://localhost:5000/images/hamburguesa${name}.jpg`} alt={name} className="w-full h-40 object-cover mb-4 rounded" />
               <h3 className="text-xl font-semibold">{name}</h3>
               <p className="text-yellow-700 font-bold">S/ {19 + i * 2}.90</p>
             </div>
