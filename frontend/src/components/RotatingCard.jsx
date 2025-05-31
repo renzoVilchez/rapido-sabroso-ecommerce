@@ -12,8 +12,8 @@ const RotatingCard = ({
   },
 }) => {
   return (
-    <div className="relative w-[300px] h-[400px] m-5 group [perspective:600px]">
-      
+    <div className="relative w-full max-w-[300px] aspect-[3/4] m-5 group [perspective:1000px]">
+
       {/* Cara frontal */}
       <div className="absolute w-full h-full rounded-[10px] overflow-hidden transition-transform duration-500 [backface-visibility:hidden] shadow-md group-hover:rotate-y-180">
         <img src={image} alt={title} className="absolute w-full h-full object-cover" />

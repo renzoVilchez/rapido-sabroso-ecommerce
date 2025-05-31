@@ -1,70 +1,82 @@
-// models/producto.js
 import db from './db.js';
 
 const Producto = {
-    // Obtener todos los productos
-    getAll: async () => {
-        const [rows] = await db.execute(`
-            SELECT p.idProducto, p.nombreProducto, p.descripcionProducto, p.precioProducto, p.stockProducto, p.imagenProducto , tp.nombreTipoProducto AS tipoProducto, c.nombreCategoria AS categoriaProducto 
-            FROM producto p
-            JOIN tipo_producto tp ON p.idTipoProducto = tp.idTipoProducto 
-            LEFT JOIN producto_categoria pc ON p.idProducto = pc.idProducto 
-            LEFT JOIN categoria c ON pc.idCategoria = c.idCategoria;
-        `);
-        return rows;
-    },
+  getAll: async () => {
+    const [rows] = await db.execute(`
+      SELECT 
+        p.id_producto, 
+        p.nombre, 
+        p.descripcion, 
+        p.precio, 
+        p.stock, 
+        p.imagen,
+        tp.nombre AS tipoProducto, 
+        c.nombre AS categoriaProducto
+      FROM producto p
+      JOIN tipo_producto tp ON p.id_tipo_producto = tp.id_tipo_producto
+      LEFT JOIN categoria c ON tp.id_categoria = c.id_categoria;
+    `);
+    return rows;
+  },
 
-    // Obtener un producto por ID
-    getById: async (id) => {
-        const [rows] = await db.execute(`
-            SELECT p.idProducto, p.nombreProducto, p.descripcionProducto, p.precioProducto, p.stockProducto, tp.nombreTipoProducto AS tipoProducto, c.nombreCategoria AS categoriaProducto 
-            FROM producto p
-            JOIN tipo_producto tp ON p.idTipoProducto = tp.idTipoProducto 
-            LEFT JOIN producto_categoria pc ON p.idProducto = pc.idProducto 
-            LEFT JOIN categoria c ON pc.idCategoria = c.idCategoria
-            WHERE p.idProducto = ?`, [id]);
-        return rows[0];
-    },
+  getById: async (id) => {
+    const [rows] = await db.execute(`
+      SELECT 
+        p.id_producto, 
+        p.nombre, 
+        p.descripcion, 
+        p.precio, 
+        p.stock, 
+        p.imagen,
+        tp.nombre AS tipoProducto, 
+        c.nombre AS categoriaProducto
+      FROM producto p
+      JOIN tipo_producto tp ON p.id_tipo_producto = tp.id_tipo_producto
+      LEFT JOIN categoria c ON tp.id_categoria = c.id_categoria
+      WHERE p.id_producto = ?
+    `, [id]);
+    return rows[0];
+  },
 
-    // Crear un nuevo producto
-    create: async (nombreProducto, descripcionProducto, precioProducto, imagenProducto, stockProducto, idTipoProducto) => {
-        const [result] = await db.execute(
-            'INSERT INTO producto(nombreProducto, descripcionProducto, precioProducto, imagenProducto, stockProducto, idTipoProducto) VALUES(?, ?, ?, ?, ?, ?)',
-            [nombreProducto, descripcionProducto, precioProducto, imagenProducto, stockProducto, idTipoProducto]
-        );
-        return {
-            idProducto: result.insertId,
-            nombreProducto,
-            descripcionProducto,
-            precioProducto,
-            imagenProducto,
-            stockProducto,
-            idTipoProducto
-        };
-    },
+  create: async (nombre, descripcion, precio, imagen, stock, id_tipo_producto) => {
+    const [result] = await db.execute(`
+      INSERT INTO producto (nombre, descripcion, precio, imagen, stock, id_tipo_producto)
+      VALUES (?, ?, ?, ?, ?, ?)`,
+      [nombre, descripcion, precio, imagen, stock, id_tipo_producto]
+    );
+    return {
+      id_producto: result.insertId,
+      nombre,
+      descripcion,
+      precio,
+      imagen,
+      stock,
+      id_tipo_producto
+    };
+  },
 
-    // Actualizar un producto
-    update: async (id, nombreProducto, descripcionProducto, precioProducto, imagenProducto, stockProducto, idTipoProducto) => {
-        const [result] = await db.execute(
-            'UPDATE producto SET nombreProducto = ?, descripcionProducto = ?, precioProducto = ?, imagenProducto = ?, stockProducto = ?, idTipoProducto = ? WHERE idProducto = ?',
-            [nombreProducto, descripcionProducto, precioProducto, imagenProducto, stockProducto, idTipoProducto, id]
-        );
-        return result.affectedRows > 0 ? {
-            idProducto: id,
-            nombreProducto,
-            descripcionProducto,
-            precioProducto,
-            imagenProducto,
-            stockProducto,
-            idTipoProducto
-        } : null;
-    },
+  update: async (id, nombre, descripcion, precio, imagen, stock, id_tipo_producto) => {
+    const [result] = await db.execute(`
+      UPDATE producto 
+      SET nombre = ?, descripcion = ?, precio = ?, imagen = ?, stock = ?, id_tipo_producto = ?
+      WHERE id_producto = ?`,
+      [nombre, descripcion, precio, imagen, stock, id_tipo_producto, id]
+    );
+    return result.affectedRows > 0 ? {
+      id_producto: id,
+      nombre,
+      descripcion,
+      precio,
+      imagen,
+      stock,
+      id_tipo_producto
+    } : null;
+  },
 
-    // Eliminar un producto
-    delete: async (id) => {
-        const [result] = await db.execute('DELETE FROM producto WHERE idProducto = ?', [id]);
-        return result.affectedRows > 0;
-    },
+  delete: async (id) => {
+    const [result] = await db.execute('DELETE FROM producto WHERE id_producto = ?', [id]);
+    return result.affectedRows > 0;
+  },
 };
 
 export default Producto;

@@ -1,11 +1,24 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
 import logoImage from '../assets/images/logo.png';
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [menus, setMenus] = useState([]); // Estado para los menús
   const { cartItemCount, setCartItemCount, isLoggedIn, setIsLoggedIn } = useContext(GlobalContext);
+
+  useEffect(() => {
+    // Llamada a la API para traer los menús
+    axios.get('http://localhost:5000/api/menus')
+      .then(res => {
+        setMenus(res.data);
+      })
+      .catch(err => {
+        console.error('Error al cargar menús:', err);
+      });
+  }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
 
@@ -14,6 +27,9 @@ function Navbar() {
     setIsLoggedIn(false);
     console.log('Sesión cerrada.');
   };
+
+  // Obtener tipos únicos para dropdown "Menú"
+  const tiposMenuUnicos = [...new Set(menus.map(menu => menu.tipo_menu))];
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 px-2" role="navigation">
@@ -40,7 +56,43 @@ function Navbar() {
             </ul>
           </div>
 
-          <Link to="/menu" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Menú</Link>
+          <div className="relative group">
+            {/* Texto "Menú" ahora es un Link a /menu */}
+            <Link
+              to="/menu"
+              className="hover:text-yellow-600 hover:scale-110 transition duration-300 inline-block cursor-pointer"
+            >
+              Menú
+            </Link>
+
+            <ul className="absolute left-0 top-full w-48 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
+
+              {/* Tipos dinámicos */}
+              {tiposMenuUnicos.map((tipo) => (
+                <li key={tipo}>
+                  <Link
+                    to={`/menu/tipo/${tipo}`}
+                    className="block px-4 py-2 hover:bg-yellow-100 capitalize"
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {`Menú  ${tipo.replace('_', ' ')}`}
+                  </Link>
+                </li>
+              ))}
+
+              {/* Opción para todos los productos */}
+              <li>
+                <Link
+                  to="/menu/productos"
+                  className="block px-4 py-2 hover:bg-yellow-100"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Todos los productos
+                </Link>
+              </li>
+            </ul>
+          </div>
+
           <Link to="/blog" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Blog</Link>
           <Link to="/contacto" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Contáctanos</Link>
 
@@ -63,6 +115,9 @@ function Navbar() {
               <li><Link to="/otros/logos" className="block px-4 py-2 hover:bg-yellow-100">Logos</Link></li>
             </ul>
           </div>
+
+          <Link to="/historial-pedidos" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Historial de Pedidos</Link>
+
         </div>
 
         {/* DERECHA: Carrito + Login + Botón hamburguesa */}
@@ -108,7 +163,6 @@ function Navbar() {
           <Link to="/menu" onClick={toggleMenu}>Menú</Link>
           <Link to="/otros" onClick={toggleMenu}>Otros</Link>
           <Link to="/carrito" onClick={toggleMenu}>Carrito</Link>
-
         </div>
       )}
     </nav>

@@ -21,16 +21,13 @@ const fadeUp = {
 function Blog() {
   return (
     <motion.section
-      className="p-6 max-w-4xl mx-auto"
+      className="p-6 max-w-5xl mx-auto my-12"
       initial="hidden"
       animate="visible"
-      variants={{
-        hidden: {},
-        visible: {},
-      }}
+      variants={{ hidden: {}, visible: {} }}
     >
       <motion.h1
-        className="text-3xl font-bold mb-6 text-yellow-600 text-center"
+        className="text-4xl font-bold mb-10 text-yellow-500 text-center drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -38,7 +35,7 @@ function Blog() {
         Nuestro Blog
       </motion.h1>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6">
         {blogPosts.map((post, index) => (
           <motion.div
             key={index}
@@ -49,9 +46,11 @@ function Blog() {
           >
             <Link
               to={post.path}
-              className="block bg-white rounded-2xl shadow-md p-6 hover:bg-yellow-100 transition-all transform hover:scale-[1.02]"
+              className="block h-full bg-yellow-400 text-white rounded-2xl shadow-lg p-6 border border-yellow-700/30 transition-all hover:shadow-yellow-500/30 hover:scale-[1.015] duration-300"
             >
-              <h2 className="text-lg font-semibold text-yellow-600">{post.title}</h2>
+              <h2 className="text-xl font-semibold text-neutral-900 leading-snug">
+                {post.title}
+              </h2>
             </Link>
           </motion.div>
         ))}

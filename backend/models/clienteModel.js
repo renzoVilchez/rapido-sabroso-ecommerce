@@ -1,179 +1,103 @@
 import db from './db.js';
+import bcrypt from 'bcrypt';
 
 const Cliente = {
   getAll: async () => {
-    const [rows] = await db.execute(`
-      SELECT 
-        cliente.idCliente,
-        cliente.nombreCliente,
-        cliente.correoCliente,
-        cliente.passwordCliente,
-        cliente.puntosCliente,
-        cliente.dniCliente,
-        cliente.rucCliente,
-        cliente.razonSocialCliente,
-        cliente.direccionFiscalCliente,
-        direccion.direccion AS direccionEnvio
-      FROM cliente
-      LEFT JOIN direccion ON cliente.idCliente = direccion.idCliente
-    `);
-
+    const [rows] = await db.execute('SELECT * FROM cliente');
     return rows;
   },
 
-  getById: async (id) => {
-    const [rows] = await db.execute(`
-      SELECT 
-        cliente.idCliente,
-        cliente.nombreCliente,
-        cliente.correoCliente,
-        cliente.passwordCliente,
-        cliente.puntosCliente,
-        cliente.dniCliente,
-        cliente.rucCliente,
-        cliente.razonSocialCliente,
-        cliente.direccionFiscalCliente,
-        direccion.direccion AS direccionEnvio
-      FROM cliente
-      LEFT JOIN direccion ON cliente.idCliente = direccion.idCliente
-      WHERE cliente.idCliente = ?
-    `, [id]);
-
+  getById: async (id_cliente) => {
+    const [rows] = await db.execute('SELECT * FROM cliente WHERE id_cliente = ?', [id_cliente]);
     return rows[0];
   },
 
-  getByCorreo: async (correo) => {
-    const [rows] = await db.execute(`
-      SELECT 
-        cliente.idCliente,
-        cliente.nombreCliente,
-        cliente.correoCliente,
-        cliente.passwordCliente,
-        cliente.puntosCliente,
-        cliente.dniCliente,
-        cliente.rucCliente,
-        cliente.razonSocialCliente,
-        cliente.direccionFiscalCliente,
-        direccion.direccion AS direccionEnvio
-      FROM cliente
-      LEFT JOIN direccion ON cliente.idCliente = direccion.idCliente
-      WHERE cliente.correoCliente = ?
-    `, [correo]);
-
+  getByCorreo: async (email) => {
+    const [rows] = await db.execute('SELECT * FROM cliente WHERE email = ?', [email]);
     return rows[0];
   },
 
-  // Método de login
-  login: async (correo, password) => {
-    const cliente = await Cliente.getByCorreo(correo);
+  login: async (email, password) => {
+    const cliente = await Cliente.getByCorreo(email);
+    if (!cliente) return null;
 
-    if (!cliente) {
-      return null;  // Cliente no encontrado
-    }
+    const match = await bcrypt.compare(password, cliente.password);
+    if (!match) return null;
 
-    // Comparar contraseñas en texto claro
-    if (cliente.passwordCliente !== password) {
-      return null;  // Contraseña incorrecta
-    }
-
-    // Si la contraseña es correcta, devolver los datos del cliente
-    return {
-      idCliente: cliente.idCliente,
-      nombreCliente: cliente.nombreCliente,
-      correoCliente: cliente.correoCliente,
-      puntosCliente: cliente.puntosCliente,
-      razonSocialCliente: cliente.razonSocialCliente,
-      direccionFiscalCliente: cliente.direccionFiscalCliente,
-      direccionEnvio: cliente.direccionEnvio,
-    };
+    const { password: _, ...safeData } = cliente;
+    return safeData;
   },
 
   create: async ({
-    nombreCliente,
-    correoCliente,
-    passwordCliente,
-    tipoPersona,
-    dniCliente = null,
-    rucCliente = null,
-    razonSocialCliente = null,
-    direccionFiscalCliente = null,
-    direccionEnvio,  // Nueva propiedad para la dirección de envío
+    nombre,
+    apellidos,
+    email,
+    password, // se espera ya hasheado
+    tipo_documento = null,
+    dni = null,
+    ruc = null,
+    razon_social = null,
+    direccion = null,
+    direccion_fiscal = null
   }) => {
-    const documento = tipoPersona === 'juridica' ? rucCliente : dniCliente;
-    const dniRucField = tipoPersona === 'juridica' ? 'rucCliente' : 'dniCliente';
-
-    // Insertar cliente
-    const [resultCliente] = await db.execute(
-      `INSERT INTO cliente 
-        (nombreCliente, correoCliente, passwordCliente, puntosCliente, razonSocialCliente, direccionFiscalCliente, ${dniRucField})
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [
-        nombreCliente,
-        correoCliente,
-        passwordCliente,
-        0.00,
-        razonSocialCliente,
-        direccionFiscalCliente,
-        documento
-      ]
+    const [result] = await db.execute(`
+      INSERT INTO cliente 
+        (nombre, apellidos, email, password, tipo_documento, dni, ruc, razon_social, direccion, direccion_fiscal)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [nombre, apellidos, email, password, tipo_documento, dni, ruc, razon_social, direccion, direccion_fiscal]
     );
 
-    const idCliente = resultCliente.insertId;
-
-    // Insertar dirección de envío
-    const [resultDireccion] = await db.execute(
-      `INSERT INTO direccion 
-        (idCliente, direccion) 
-       VALUES (?, ?)`,
-      [idCliente, direccionEnvio]
-    );
-
-    return {
-      idCliente,
-      nombreCliente,
-      correoCliente,
-      puntosCliente: 0.00,
-      razonSocialCliente,
-      direccionFiscalCliente,
-      [dniRucField]: documento,
-      direccionEnvio,
-    };
+    const newCliente = await Cliente.getById(result.insertId);
+    const { password: _, ...safeData } = newCliente;
+    return safeData;
   },
 
-  update: async (id, { nombre, correo, tipoPersona, documento, razonSocial, direccionFiscal, direccionEnvio }) => {
-    let dniRucField = tipoPersona === 'juridica' ? 'rucCliente' : 'dniCliente';
+  update: async (id_cliente, data) => {
+    const {
+      nombre,
+      apellidos,
+      email,
+      tipo_documento,
+      dni,
+      ruc,
+      razon_social,
+      direccion,
+      direccion_fiscal,
+      password
+    } = data;
 
-    // Actualizar cliente
-    const [resultCliente] = await db.execute(
-      'UPDATE cliente SET nombreCliente = ?, correoCliente = ?, razonSocialCliente = ?, direccionFiscalCliente = ?, ' + dniRucField + ' = ? WHERE idCliente = ?',
-      [nombre, correo, razonSocial, direccionFiscal, documento, id]
-    );
+    const campos = [
+      'nombre = ?', 'apellidos = ?', 'email = ?', 'tipo_documento = ?',
+      'dni = ?', 'ruc = ?', 'razon_social = ?', 'direccion = ?', 'direccion_fiscal = ?'
+    ];
+    const valores = [nombre, apellidos, email, tipo_documento, dni, ruc, razon_social, direccion, direccion_fiscal];
 
-    // Actualizar dirección de envío
-    const [resultDireccion] = await db.execute(
-      'UPDATE direccion SET direccion = ? WHERE idCliente = ?',
-      [direccionEnvio, id]
-    );
+    if (password) {
+      campos.push('password = ?');
+      valores.push(password);
+    }
 
-    return resultCliente.affectedRows > 0 || resultDireccion.affectedRows > 0
-      ? { idCliente: id, nombre, correo, razonSocial, direccionFiscal, direccionEnvio, documento }
-      : null;
+    valores.push(id_cliente);
+
+    await db.execute(`
+    UPDATE cliente SET ${campos.join(', ')} WHERE id_cliente = ?
+  `, valores);
+
+    const updatedCliente = await Cliente.getById(id_cliente);
+    const { password: _, ...safeData } = updatedCliente;
+    return safeData;
   },
 
-  updatePuntos: async (idCliente, puntos) => {
+  updatePuntos: async (id_cliente, puntos) => {
     const [result] = await db.execute(
-      'UPDATE cliente SET puntosCliente = ? WHERE idCliente = ?',
-      [puntos, idCliente]
+      'UPDATE cliente SET puntos = ? WHERE id_cliente = ?',
+      [puntos, id_cliente]
     );
     return result.affectedRows > 0;
   },
 
-  delete: async (id) => {
-    // Primero, eliminar direcciones asociadas al cliente
-    await db.execute('DELETE FROM direccion WHERE idCliente = ?', [id]);
-
-    // Luego eliminar al cliente
-    const [result] = await db.execute('DELETE FROM cliente WHERE idCliente = ?', [id]);
+  delete: async (id_cliente) => {
+    const [result] = await db.execute('DELETE FROM cliente WHERE id_cliente = ?', [id_cliente]);
     return result.affectedRows > 0;
   },
 };

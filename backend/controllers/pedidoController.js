@@ -7,7 +7,8 @@ const pedidoController = {
       const pedidos = await Pedido.getAll();
       res.json(pedidos);
     } catch (err) {
-      res.status(500).json({ error: 'Error al obtener pedidos' });
+      console.error('Error en getAll:', err);
+      res.status(500).json({ error: 'Error al obtener los pedidos' });
     }
   },
 
@@ -16,30 +17,69 @@ const pedidoController = {
     try {
       const { id } = req.params;
       const pedido = await Pedido.getById(id);
-      if (pedido) {
-        res.json(pedido);
-      } else {
-        res.status(404).json({ error: 'Pedido no encontrado' });
+      if (!pedido) {
+        return res.status(404).json({ error: 'Pedido no encontrado' });
       }
+      res.json(pedido);
     } catch (err) {
-      res.status(500).json({ error: 'Error al obtener pedido' });
+      console.error('Error en getById:', err);
+      res.status(500).json({ error: 'Error al obtener el pedido' });
     }
   },
 
   // Crear un nuevo pedido
   create: async (req, res) => {
     try {
-      const { idCliente, fechaPedido, productos, puntosGanados, puntosUsados } = req.body;
+      const {
+        id_cliente,
+        id_metodo_pago,
+        direccion_entrega,
+        metodo_envio,
+        notas,
+        descuento = 0,
+        puntos_usados = 0,
+        productos = [],
+        menus = [],
+        tipo_comprobante = 'boleta',
+        dni = null,
+        ruc = null,
+        razon_social = null,
+        direccion_fiscal = null
+      } = req.body;
 
-      // Si no se proporcionan puntos ganados y puntos usados, asignarles valores por defecto
-      const puntosGanadosDef = puntosGanados || 0;
-      const puntosUsadosDef = puntosUsados || 0;
+      // Validación: cliente y método de pago son obligatorios
+      if (!id_cliente || !id_metodo_pago) {
+        return res.status(400).json({ error: 'Faltan datos obligatorios' });
+      }
 
-      const nuevoPedido = await Pedido.create(idCliente, fechaPedido, productos, puntosGanadosDef, puntosUsadosDef);
+      // Validación: debe haber al menos un producto o un menú
+      if ((!Array.isArray(productos) || productos.length === 0) &&
+        (!Array.isArray(menus) || menus.length === 0)) {
+        return res.status(400).json({ error: 'Debe incluir al menos un producto o menú' });
+      }
+
+      // Crear el pedido (pasando todos los datos)
+      const nuevoPedido = await Pedido.create({
+        id_cliente,
+        id_metodo_pago,
+        direccion_entrega,
+        metodo_envio,
+        notas,
+        descuento,
+        puntos_usados,
+        productos,
+        menus,
+        tipo_comprobante,
+        dni,
+        ruc,
+        razon_social,
+        direccion_fiscal
+      });
+
       res.status(201).json(nuevoPedido);
     } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Error al crear pedido' });
+      console.error('Error en create:', err);
+      res.status(500).json({ error: 'Error al crear el pedido' });
     }
   },
 
@@ -47,16 +87,40 @@ const pedidoController = {
   update: async (req, res) => {
     try {
       const { id } = req.params;
-      const { idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados } = req.body;
+      const {
+        id_cliente,
+        id_metodo_pago,
+        direccion_entrega,
+        metodo_envio,
+        notas,
+        descuento = 0,
+        puntos_usados = 0,
+        productos = []
+      } = req.body;
 
-      const actualizado = await Pedido.update(id, idCliente, fechaPedido, totalPedido, puntosGanados, puntosUsados);
-      if (actualizado) {
-        res.json(actualizado);
-      } else {
-        res.status(404).json({ error: 'Pedido no encontrado' });
+      if (!id_cliente || !id_metodo_pago || !Array.isArray(productos) || productos.length === 0) {
+        return res.status(400).json({ error: 'Faltan datos obligatorios o productos inválidos' });
       }
+
+      const pedidoActualizado = await Pedido.update(id, {
+        id_cliente,
+        id_metodo_pago,
+        direccion_entrega,
+        metodo_envio,
+        notas,
+        descuento,
+        puntos_usados,
+        productos
+      });
+
+      if (!pedidoActualizado) {
+        return res.status(404).json({ error: 'Pedido no encontrado' });
+      }
+
+      res.json(pedidoActualizado);
     } catch (err) {
-      res.status(500).json({ error: 'Error al actualizar pedido' });
+      console.error('Error en update:', err);
+      res.status(500).json({ error: 'Error al actualizar el pedido' });
     }
   },
 
@@ -65,13 +129,14 @@ const pedidoController = {
     try {
       const { id } = req.params;
       const eliminado = await Pedido.delete(id);
-      if (eliminado) {
-        res.json({ mensaje: 'Pedido eliminado correctamente' });
-      } else {
-        res.status(404).json({ error: 'Pedido no encontrado' });
+      if (!eliminado) {
+        return res.status(404).json({ error: 'Pedido no encontrado' });
       }
+
+      res.json({ mensaje: 'Pedido eliminado correctamente' });
     } catch (err) {
-      res.status(500).json({ error: 'Error al eliminar pedido' });
+      console.error('Error en delete:', err);
+      res.status(500).json({ error: 'Error al eliminar el pedido' });
     }
   },
 };

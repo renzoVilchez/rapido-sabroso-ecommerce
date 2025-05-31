@@ -22,7 +22,7 @@
   bottom: -100px;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.2);
+  background: #4B2E00;
   border-radius: 50%;
   animation: subir 10s infinite ease-in;
 }

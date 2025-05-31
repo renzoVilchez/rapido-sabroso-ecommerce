@@ -1,15 +1,17 @@
 import Categoria from '../models/categoriaModel.js';
 
 const categoriaController = {
+  // Obtener todas las categorías
   getAll: async (req, res) => {
     try {
       const categorias = await Categoria.getAll();
       res.json(categorias);
     } catch (err) {
-      res.status(500).json({ error: 'Error al obtener categorías' });
+      res.status(500).json({ error: 'Error al obtener categorías', detalle: err.message });
     }
   },
 
+  // Obtener categoría por ID
   getById: async (req, res) => {
     try {
       const { id } = req.params;
@@ -20,20 +22,22 @@ const categoriaController = {
         res.status(404).json({ error: 'Categoría no encontrada' });
       }
     } catch (err) {
-      res.status(500).json({ error: 'Error al obtener categoría' });
+      res.status(500).json({ error: 'Error al obtener categoría', detalle: err.message });
     }
   },
 
+  // Crear nueva categoría
   create: async (req, res) => {
     try {
       const { nombre } = req.body;
       const nueva = await Categoria.create(nombre);
       res.status(201).json(nueva);
     } catch (err) {
-      res.status(500).json({ error: 'Error al crear categoría' });
+      res.status(500).json({ error: 'Error al crear categoría', detalle: err.message });
     }
   },
 
+  // Actualizar categoría
   update: async (req, res) => {
     try {
       const { id } = req.params;
@@ -45,10 +49,11 @@ const categoriaController = {
         res.status(404).json({ error: 'Categoría no encontrada' });
       }
     } catch (err) {
-      res.status(500).json({ error: 'Error al actualizar categoría' });
+      res.status(500).json({ error: 'Error al actualizar categoría', detalle: err.message });
     }
   },
 
+  // Eliminar categoría
   delete: async (req, res) => {
     try {
       const { id } = req.params;
@@ -59,9 +64,19 @@ const categoriaController = {
         res.status(404).json({ error: 'Categoría no encontrada' });
       }
     } catch (err) {
-      res.status(500).json({ error: 'Error al eliminar categoría' });
+      res.status(500).json({ error: 'Error al eliminar categoría', detalle: err.message });
     }
   },
+
+  // Obtener categorías con tipos
+  getConTipos: async (req, res) => {
+    try {
+      const resultado = await Categoria.getCategoriasConTipos();
+      res.json(resultado);
+    } catch (err) {
+      res.status(500).json({ error: 'Error al obtener categorías con tipos', detalle: err.message });
+    }
+  }
 };
 
 export default categoriaController;

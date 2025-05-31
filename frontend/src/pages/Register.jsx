@@ -6,6 +6,7 @@ const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nombre: '',
+    apellidos: '',
     correo: '',
     password: '',
     tipoPersona: 'natural',
@@ -37,25 +38,39 @@ const Register = () => {
     const direccionCompuesta = `Trujillo - ${formData.distrito} - ${formData.calle}`;
 
     const datosFinales = {
-      ...formData,
-      direccionEnvio: direccionCompuesta,
+      nombre: formData.nombre,
+      apellidos: formData.apellidos,
+      email: formData.correo,
+      password: formData.password,
+      tipo_documento: formData.tipoPersona === 'natural' ? 'DNI' : 'RUC',
+      dni: formData.tipoPersona === 'natural' ? formData.documento : null,
+      ruc: formData.tipoPersona === 'juridica' ? formData.documento : null,
+      razon_social: formData.tipoPersona === 'juridica' ? formData.razonSocial || null : null,
+      direccion_fiscal: formData.tipoPersona === 'juridica' ? formData.direccionFiscal || null : null,
+      direccion: `Trujillo - ${formData.distrito} - ${formData.calle}`
     };
 
+
     try {
-      console.log('Enviando este JSON:', datosFinales);
       const response = await axios.post('http://localhost:5000/api/clientes/registro', datosFinales);
       navigate('/login');
     } catch (error) {
-      console.log(error.response)
-      console.error("Error detallado en el registro:", error.response?.data);
+      const respuesta = error.response?.data;
+      console.error("Error en el registro:", respuesta);
 
-      if (error.response?.data?.detalle?.includes("Duplicate entry")) {
-        const correoDuplicado = error.response.data.detalle.split("'")[1]; // Extrae el correo
+      if (respuesta?.detalle?.includes("Duplicate entry")) {
+        const correoDuplicado = respuesta.detalle.split("'")[1];
         setError(`El correo ${correoDuplicado} ya está registrado.`);
+      } else if (respuesta?.errores && typeof respuesta.errores === 'object') {
+        const mensajes = Object.values(respuesta.errores).flat();
+        setError(mensajes.join(" "));
+      } else if (respuesta?.mensaje) {
+        setError(respuesta.mensaje);
       } else {
         setError("Ocurrió un error al registrar. Intenta nuevamente.");
       }
     }
+
   };
 
   const [error, setError] = useState('');
@@ -104,11 +119,24 @@ const Register = () => {
 
         {/* Nombre */}
         <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Nombre completo</label>
+          <label className="block text-gray-600 mb-1">Nombre</label>
           <input
             type="text"
             name="nombre"
             value={formData.nombre}
+            onChange={handleChange}
+            required
+            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
+        {/* Apellidos */}
+        <div className="mb-4">
+          <label className="block text-gray-600 mb-1">Apellidos</label>
+          <input
+            type="text"
+            name="apellidos"
+            value={formData.apellidos}
             onChange={handleChange}
             required
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"

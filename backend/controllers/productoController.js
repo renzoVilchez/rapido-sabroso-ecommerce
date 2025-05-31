@@ -27,9 +27,24 @@ const getProductoById = async (req, res) => {
 
 // Crear un nuevo producto
 const createProducto = async (req, res) => {
-    const { nombre, descripcion, precio, imagenProducto, stock, idTipoProducto } = req.body;
+    const {
+        nombreProducto,
+        descripcionProducto,
+        precioProducto,
+        imagenProducto,
+        stockProducto,
+        idTipoProducto
+    } = req.body;
+
     try {
-        const newProducto = await Producto.create(nombre, descripcion, precio, imagenProducto, stock, idTipoProducto);
+        const newProducto = await Producto.create(
+            nombreProducto,
+            descripcionProducto,
+            precioProducto,
+            imagenProducto,
+            stockProducto,
+            idTipoProducto
+        );
         res.status(201).json(newProducto);
     } catch (err) {
         res.status(500).json({ message: 'Error al crear el producto', error: err });
@@ -39,12 +54,30 @@ const createProducto = async (req, res) => {
 // Actualizar un producto
 const updateProducto = async (req, res) => {
     const { id } = req.params;
-    const { nombre, descripcion, precio, imagenProducto, stock, idTipoProducto } = req.body;
+    const {
+        nombreProducto,
+        descripcionProducto,
+        precioProducto,
+        imagenProducto,
+        stockProducto,
+        idTipoProducto
+    } = req.body;
+
     try {
-        const updatedProducto = await Producto.update(id, nombre, descripcion, precio, imagenProducto, stock, idTipoProducto);
+        const updatedProducto = await Producto.update(
+            id,
+            nombreProducto,
+            descripcionProducto,
+            precioProducto,
+            imagenProducto,
+            stockProducto,
+            idTipoProducto
+        );
+
         if (!updatedProducto) {
             return res.status(404).json({ message: 'Producto no encontrado' });
         }
+
         res.status(200).json(updatedProducto);
     } catch (err) {
         res.status(500).json({ message: 'Error al actualizar el producto', error: err });

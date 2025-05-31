@@ -1,4 +1,5 @@
 import Cliente from '../models/clienteModel.js';
+import bcrypt from 'bcrypt';
 
 const clienteController = {
   getAll: async (req, res) => {
@@ -14,11 +15,7 @@ const clienteController = {
     try {
       const { id } = req.params;
       const cliente = await Cliente.getById(id);
-      if (cliente) {
-        res.json(cliente);
-      } else {
-        res.status(404).json({ error: 'Cliente no encontrado' });
-      }
+      cliente ? res.json(cliente) : res.status(404).json({ error: 'Cliente no encontrado' });
     } catch {
       res.status(500).json({ error: 'Error al obtener cliente' });
     }
@@ -28,32 +25,23 @@ const clienteController = {
     try {
       const { correo } = req.params;
       const cliente = await Cliente.getByCorreo(correo);
-      if (cliente) {
-        res.json(cliente);
-      } else {
-        res.status(404).json({ error: 'Cliente no encontrado' });
-      }
+      cliente ? res.json(cliente) : res.status(404).json({ error: 'Cliente no encontrado' });
     } catch {
       res.status(500).json({ error: 'Error al buscar cliente por correo' });
     }
   },
 
-  // Nuevo método para login
   login: async (req, res) => {
     try {
-      const { correo, password } = req.body; // Cambié a body en lugar de params para que sea más seguro
+      const { correo, password } = req.body;
+      const cliente = await Cliente.getByCorreo(correo);
+      if (!cliente) return res.status(401).json({ success: false, message: 'Correo no encontrado' });
 
-      const cliente = await Cliente.login(correo, password);
+      const match = await bcrypt.compare(password, cliente.password);
+      if (!match) return res.status(401).json({ success: false, message: 'Contraseña incorrecta' });
 
-      if (!cliente) {
-        return res.status(401).json({ success: false, message: 'Correo no encontrado' });
-      }
-
-      return res.status(200).json({
-        success: true,
-        message: 'Login exitoso',
-        cliente
-      });
+      delete cliente.password;
+      res.status(200).json({ success: true, message: 'Login exitoso', cliente });
     } catch (err) {
       res.status(500).json({ error: 'Error al intentar iniciar sesión' });
     }
@@ -61,64 +49,40 @@ const clienteController = {
 
   create: async (req, res) => {
     try {
-      const { nombre, correo, password, tipoPersona, documento, razonSocial, direccionFiscal, direccionEnvio } = req.body;
-
-      // Se agrega 'direccionEnvio' al crear el cliente
-      const nuevoCliente = await Cliente.create({
-        nombreCliente: nombre,
-        correoCliente: correo,
-        passwordCliente: password,
-        tipoPersona,
-        dniCliente: tipoPersona === 'natural' ? documento : null,
-        rucCliente: tipoPersona === 'juridica' ? documento : null,
-        razonSocialCliente: razonSocial || null,
-        direccionFiscalCliente: direccionFiscal || null,
-        direccionEnvio
-      });
-
+      const datos = req.body;
+      const nuevoCliente = await Cliente.create(datos);
       res.status(201).json(nuevoCliente);
     } catch (error) {
-      console.error('Error al registrar cliente:', error.message);
       res.status(500).json({ error: 'Error al registrar cliente', detalle: error.message });
     }
   },
 
-  update: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { nombre, correo, tipoPersona, documento, razonSocial, direccionFiscal, direccionEnvio } = req.body;
+ update: async (req, res) => {
+  try {
+    const { id } = req.params;
 
-      // Se incluye el campo 'direccionEnvio' al actualizar el cliente
-      const actualizado = await Cliente.update(id, {
-        nombre,
-        correo,
-        tipoPersona,
-        documento,
-        razonSocial,
-        direccionFiscal,
-        direccionEnvio // Ahora también se actualiza la dirección de envío
-      });
-
-      if (actualizado) {
-        res.json(actualizado);
-      } else {
-        res.status(404).json({ error: 'Cliente no encontrado' });
-      }
-    } catch {
-      res.status(500).json({ error: 'Error al actualizar cliente' });
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      req.body.password = await bcrypt.hash(req.body.password, salt);
     }
-  },
+
+    const actualizado = await Cliente.update(id, req.body);
+    actualizado
+      ? res.json(actualizado)
+      : res.status(404).json({ error: 'Cliente no encontrado' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error al actualizar cliente' });
+  }
+},
 
   updatePuntos: async (req, res) => {
     try {
       const { id } = req.params;
       const { puntos } = req.body;
       const actualizado = await Cliente.updatePuntos(id, puntos);
-      if (actualizado) {
-        res.json({ mensaje: 'Puntos actualizados correctamente' });
-      } else {
-        res.status(404).json({ error: 'Cliente no encontrado o sin cambios' });
-      }
+      actualizado
+        ? res.json({ mensaje: 'Puntos actualizados correctamente' })
+        : res.status(404).json({ error: 'Cliente no encontrado o sin cambios' });
     } catch {
       res.status(500).json({ error: 'Error al actualizar puntos del cliente' });
     }
@@ -128,17 +92,13 @@ const clienteController = {
     try {
       const { id } = req.params;
       const eliminado = await Cliente.delete(id);
-      if (eliminado) {
-        res.json({ mensaje: 'Cliente eliminado correctamente' });
-      } else {
-        res.status(404).json({ error: 'Cliente no encontrado' });
-      }
+      eliminado
+        ? res.json({ mensaje: 'Cliente eliminado correctamente' })
+        : res.status(404).json({ error: 'Cliente no encontrado' });
     } catch {
       res.status(500).json({ error: 'Error al eliminar cliente' });
     }
   }
 };
-
-
 
 export default clienteController;

@@ -12,6 +12,8 @@ import clienteRoutes from './routes/clienteRoutes.js';
 import comprobanteRoutes from './routes/comprobanteRoutes.js';
 import detallePedidoRoutes from './routes/detallePedidoRoutes.js';
 import pedidoRoutes from './routes/pedidoRoutes.js';
+import metodoPagoRoutes from './routes/metodoPagoRoutes.js';
+import menuRoutes from './routes/menuRoutes.js';
 
 import path from 'path';
 const __dirname = path.resolve();
@@ -32,6 +34,8 @@ app.use('/api/clientes', clienteRoutes);
 app.use('/api/comprobantes', comprobanteRoutes);
 app.use('/api/detalles-pedido', detallePedidoRoutes);
 app.use('/api/pedidos', pedidoRoutes);
+app.use('/api/metodos-pago', metodoPagoRoutes);
+app.use('/api/menus', menuRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

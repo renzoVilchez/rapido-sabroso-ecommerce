@@ -1,6 +1,6 @@
 import BannerCarousel from '../components/BannerCarousel';
 import HomeInfo from '../components/HomeInfo';
-import TipoCategoriasCarousel from "../components/TipoCategoriasCarousel";
+import CategoriaTiposCarousel from "../components/CategoriaTiposCarousel";
 import musicaCriolla from "../assets/audio/nada soy.mp3";
 
 function Home() {
@@ -14,7 +14,7 @@ function Home() {
 
       <BannerCarousel />
       <HomeInfo />
-      <TipoCategoriasCarousel />
+      <CategoriaTiposCarousel />
     </>
   );
 }
