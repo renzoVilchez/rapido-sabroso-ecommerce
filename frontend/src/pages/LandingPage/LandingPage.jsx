@@ -103,7 +103,7 @@ const LandingPage = () => {
 
       {/* Recompensas */}
       <section className="py-16 px-8 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-6">Gana recompensas con cada compra</h2>
+        <h2 className="text-3xl font-bold mb-6">Gana bonos por cada compra y canjealos</h2>
         <p className="max-w-xl mx-auto mb-6 text-lg">
           Por cada S/10 que gastes, te devolvemos S/1 en puntos(bonos). ¡Acumula y canjea por productos gratis!
         </p>

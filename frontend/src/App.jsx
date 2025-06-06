@@ -45,7 +45,7 @@ import Register from './pages/Register';
 import NotFound from './pages/NotFound';
 
 import Menu from './pages/Menu/index';
-import MenuProductos from './pages/Menu/Productos';
+import MenuProductos from './pages/Menu/TipoProducto';
 import TipoMenu from './pages/Menu/TipoMenu';
 
 import HistorialPedido from './pages/HistorialPedidos';
@@ -75,7 +75,7 @@ function App() {
         <Route path="/home" element={<Home />} />
 
         <Route path="/menu" element={<Menu />} />
-        <Route path="/menu/productos" element={<MenuProductos />} />
+        <Route path="/menu/productos/tipo/:tipo" element={<MenuProductos />} />
         <Route path="menu/tipo/:tipo" element={<TipoMenu />} />
 
         <Route path="/blog" element={<Blog />} />

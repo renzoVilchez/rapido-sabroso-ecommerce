@@ -4,20 +4,34 @@ import { Link } from 'react-router-dom';
 import { GlobalContext } from '../context/GlobalContext';
 import logoImage from '../assets/images/logo.png';
 
+function normalizeString(str) {
+  if (typeof str !== 'string') return '';
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [menus, setMenus] = useState([]); // Estado para los menús
+  const [menus, setMenus] = useState([]);
+  const [productos, setProductos] = useState([]);
   const { cartItemCount, setCartItemCount, isLoggedIn, setIsLoggedIn } = useContext(GlobalContext);
 
   useEffect(() => {
-    // Llamada a la API para traer los menús
     axios.get('http://localhost:5000/api/menus')
-      .then(res => {
-        setMenus(res.data);
-      })
-      .catch(err => {
-        console.error('Error al cargar menús:', err);
-      });
+      .then(res => setMenus(res.data))
+      .catch(err => console.error('Error al cargar menús:', err));
+  }, []);
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/api/productos')
+      .then(res => setProductos(res.data))
+      .catch(err => console.error('Error al cargar productos:', err));
   }, []);
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
@@ -28,21 +42,19 @@ function Navbar() {
     console.log('Sesión cerrada.');
   };
 
-  // Obtener tipos únicos para dropdown "Menú"
-  const tiposMenuUnicos = [...new Set(menus.map(menu => menu.tipo_menu))];
+  const tiposMenuUnicos = [...new Set(menus.map(menu => menu.tipo_menu).filter(Boolean))];
+  const tiposProductoUnicos = [...new Set(productos.map(producto => producto.tipoProducto).filter(Boolean))];
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50 px-2" role="navigation">
       <div className="max-w-7xl mx-auto flex items-center justify-between py-2">
 
-        {/* IZQUIERDA: Logo */}
         <div className="flex-shrink-0">
           <Link to="/home">
             <img src={logoImage} alt="Logo" className="w-[80px]" />
           </Link>
         </div>
 
-        {/* CENTRO: Menú (solo desktop) */}
         <div className="hidden md:flex gap-6 text-base font-medium text-gray-700">
           <Link to="/home" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Inicio</Link>
 
@@ -57,38 +69,41 @@ function Navbar() {
           </div>
 
           <div className="relative group">
-            {/* Texto "Menú" ahora es un Link a /menu */}
-            <Link
-              to="/menu"
-              className="hover:text-yellow-600 hover:scale-110 transition duration-300 inline-block cursor-pointer"
-            >
-              Menú
-            </Link>
+            <Link to="/menu" className="hover:text-yellow-600 hover:scale-110 transition duration-300 inline-block cursor-pointer">Menú</Link>
 
             <ul className="absolute left-0 top-full w-48 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
-
-              {/* Tipos dinámicos */}
               {tiposMenuUnicos.map((tipo) => (
                 <li key={tipo}>
                   <Link
-                    to={`/menu/tipo/${tipo}`}
+                    to={`/menu/tipo/${normalizeString(tipo)}`}
                     className="block px-4 py-2 hover:bg-yellow-100 capitalize"
                     onClick={() => setMenuOpen(false)}
                   >
-                    {`Menú  ${tipo.replace('_', ' ')}`}
+                    {`Menú ${tipo.replace('_', ' ')}`}
                   </Link>
                 </li>
               ))}
-
-              {/* Opción para todos los productos */}
-              <li>
+              <li className="relative group">
                 <Link
-                  to="/menu/productos"
+                  to="/productos"
                   className="block px-4 py-2 hover:bg-yellow-100"
                   onClick={() => setMenuOpen(false)}
                 >
-                  Todos los productos
+                  Productos
                 </Link>
+                <ul className="absolute left-full top-0 ml-1 w-48 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
+                  {tiposProductoUnicos.map((tipo) => (
+                    <li key={tipo}>
+                      <Link
+                        to={`/menu/productos/tipo/${normalizeString(tipo)}`}
+                        className="block px-4 py-2 hover:bg-yellow-100 capitalize"
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {tipo.replace('_', ' ')}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </li>
             </ul>
           </div>
@@ -117,10 +132,8 @@ function Navbar() {
           </div>
 
           <Link to="/historial-pedidos" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Historial de Pedidos</Link>
-
         </div>
 
-        {/* DERECHA: Carrito + Login + Botón hamburguesa */}
         <div className="flex items-center gap-4">
           <Link to="/carrito" className="relative text-xl text-gray-700 hover:text-yellow-600 hover:scale-125 transition-all duration-300">
             🛒
@@ -152,7 +165,6 @@ function Navbar() {
         </div>
       </div>
 
-      {/* MENÚ MÓVIL */}
       {menuOpen && (
         <div className="md:hidden flex flex-col gap-4 py-4 text-center text-base font-medium text-gray-700 bg-yellow-50">
           <Link to="/home" onClick={toggleMenu}>Inicio</Link>

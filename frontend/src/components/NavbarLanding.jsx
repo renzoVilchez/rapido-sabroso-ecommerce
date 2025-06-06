@@ -16,7 +16,7 @@ const NavbarLanding = () => {
           Registrarse
         </Link>
         <Link to="/home" className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">
-          Ir al Menú
+          Comenzar
         </Link>
       </div>
     </nav>

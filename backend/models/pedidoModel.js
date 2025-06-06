@@ -67,19 +67,19 @@ const Pedido = {
       direccion_fiscal = null
     } = pedidoData;
 
-    let subtotal = 0;
+    let total = 0;
 
     for (const item of productos) {
-      subtotal += item.precio * item.cantidad;
+      total += item.precio * item.cantidad;
     }
 
     for (const menu of menus) {
-      subtotal += menu.precio * menu.cantidad;
+      total += menu.precio * menu.cantidad;
     }
 
-    const total_con_descuento = Math.max(0, subtotal - descuento);
-    const igv = +(total_con_descuento * 18 / 118).toFixed(2);
-    const total = +total_con_descuento.toFixed(2);
+    total = Math.max(0, total - descuento);
+    const igv = +(total * 0.18).toFixed(2);
+    const subtotal = +(total - igv).toFixed(2);
 
     try {
       const [pedidoResult] = await db.execute(`

@@ -1,17 +1,29 @@
 import { useEffect, useState, useRef, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import ProductCard from '../../components/ProductCard';
-import { Link } from 'react-router-dom';
 import { GlobalContext } from '../../context/GlobalContext';
 
-function Productos() {
+function normalizeString(str) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function TipoProducto() {
+  const { tipo } = useParams();
   const [productos, setProductos] = useState([]);
   const [error, setError] = useState(null);
   const { cartItemCount, setCartItemCount } = useContext(GlobalContext);
   const hasLoadedLocalStorage = useRef(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Cargar carrito desde localStorage solo una vez
     if (!hasLoadedLocalStorage.current) {
       const carritoGuardado = JSON.parse(localStorage.getItem('carrito')) || [];
       const totalCarrito = carritoGuardado.reduce((acc, item) => acc + item.cantidad, 0);
@@ -19,7 +31,6 @@ function Productos() {
       hasLoadedLocalStorage.current = true;
     }
 
-    // Obtener productos desde la API
     axios.get('http://localhost:5000/api/productos')
       .then(response => {
         const productosCamelCase = response.data.map(p => ({
@@ -33,30 +44,21 @@ function Productos() {
           categoriaProducto: p.categoriaProducto,
         }));
         setProductos(productosCamelCase);
+        setLoading(false);
       })
       .catch(error => {
-        console.error('Hubo un error al obtener los productos:', error);
         setError('No se pudo cargar el menú. Intenta nuevamente más tarde.');
+        setLoading(false);
       });
   }, [setCartItemCount]);
 
-  // Agrupar productos por categoría y tipo
-  const groupByCategoryAndType = (items) => {
-    return items.reduce((acc, item) => {
-      const category = item.categoriaProducto || 'Sin categoría';
-      const type = item.tipoProducto || 'Otros';
+  // Obtener el tipoProducto original para mostrar en título y filtrar productos
+  const tipoOriginal = productos.find(p => normalizeString(p.tipoProducto) === tipo.toLowerCase())?.tipoProducto || tipo;
 
-      if (!acc[category]) acc[category] = {};
-      if (!acc[category][type]) acc[category][type] = [];
+  // Filtrar productos por tipoProducto que coincida con el slug de la URL
+  const productosFiltrados = productos.filter(p => normalizeString(p.tipoProducto) === tipo.toLowerCase());
 
-      acc[category][type].push(item);
-      return acc;
-    }, {});
-  };
-
-  const groupedProductos = groupByCategoryAndType(productos);
-
-  // Agregar producto al carrito
+  // Función para agregar al carrito
   const agregarAlCarrito = (producto) => {
     const carritoActual = JSON.parse(localStorage.getItem('carrito')) || [];
     const idProducto = Number(producto.idProducto);
@@ -91,9 +93,11 @@ function Productos() {
     setCartItemCount(total);
   };
 
+  if (loading) return <p>Cargando productos...</p>;
+
   return (
     <div className="bg-white min-h-screen p-6">
-      <h1 className="text-3xl font-bold mb-8 text-center text-yellow-600">Menú</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center text-yellow-600">{tipoOriginal}</h1>
 
       {error && (
         <div className="bg-red-100 text-red-700 border border-red-300 p-4 rounded-lg text-center font-semibold mb-6">
@@ -101,42 +105,21 @@ function Productos() {
         </div>
       )}
 
-      {Object.entries(groupedProductos).map(([categoria, tipos]) => (
-        <div key={categoria}>
-          <h2 className="text-2xl font-semibold mb-6 text-center capitalize text-yellow-600">{categoria}</h2>
+      {productosFiltrados.length === 0 && (
+        <p className="text-center text-gray-500">No hay productos para esta categoría.</p>
+      )}
 
-          {Object.entries(tipos).map(([tipo, items]) => (
-            <div key={tipo} className="bg-yellow-50 shadow-md rounded-2xl p-6 mb-10">
-              <h3 className="text-xl font-bold mb-6 text-center capitalize text-yellow-600 border-b-2 border-yellow-500 pb-3">
-                {tipo}
-              </h3>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                {items.slice(0, 4).map(producto => (
-                  <ProductCard
-                    key={producto.idProducto}
-                    producto={producto}
-                    onAgregarAlCarrito={agregarAlCarrito}
-                  />
-                ))}
-              </div>
-
-              {items.length > 4 && (
-                <div className="mt-6 text-center">
-                  <Link
-                    to={`/menu/${categoria.toLowerCase()}/${tipo.toLowerCase()}`}
-                    className="text-yellow-600 hover:underline font-semibold transition-colors"
-                  >
-                    Ver más {tipo}
-                  </Link>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        {productosFiltrados.map(producto => (
+          <ProductCard
+            key={producto.idProducto}
+            producto={producto}
+            onAgregarAlCarrito={agregarAlCarrito}
+          />
+        ))}
+      </div>
     </div>
   );
 }
 
-export default Productos;
+export default TipoProducto;

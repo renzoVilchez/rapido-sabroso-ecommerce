@@ -9,7 +9,7 @@ function MenuCard({ menu, onAgregarAlCarrito }) {
             <img
                 src={urlImagen}
                 alt={menu.nombre}
-                className="w-full h-40 object-cover mb-4 rounded-lg"
+                className="w-full h-80 object-cover mb-4 rounded-lg"
             />
 
             {/* Nombre del menú */}
