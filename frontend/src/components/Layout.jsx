@@ -2,15 +2,18 @@
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { Outlet } from 'react-router-dom';
-import musicaCriolla from "../assets/audio/nada soy.mp3";
+import musicaCriolla from "../assets/audio/Del Norte Vengo.mp3";
+
 const Layout = () => {
   return (
-    <div className="min-h-screen flex flex-col max-w-7xl mx-auto bg-yellow-50">
-      <audio src={musicaCriolla} autoPlay loop hidden />
+    <div className="min-h-screen flex flex-col">
+      <audio id="background-music" src={musicaCriolla} autoPlay loop hidden />
       <Navbar />
-      <div className="flex-grow p-4">
+      
+      <div className="flex-grow">
         <Outlet />
       </div>
+      
       <Footer />
     </div>
   );

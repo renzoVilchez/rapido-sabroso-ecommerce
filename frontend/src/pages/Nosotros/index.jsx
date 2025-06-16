@@ -1,6 +1,11 @@
 import { Link } from 'react-router-dom';
 import { Target, Eye, ListChecks, HeartHandshake } from 'lucide-react';
 import { motion } from 'framer-motion';
+import RotatingCard from '../../components/RotatingCard';
+import CarlosImage from '../../assets/images/CarlosMendoza.jfif';
+import MarianaImage from '../../assets/images/MarianaTorres.jfif';
+import LuisImage from '../../assets/images/LuisRamirez.jfif';
+import SofiaImage from '../../assets/images/SofiaDelgado.jfif';
 
 const sections = [
   { path: 'mision', label: 'Misión', icon: <Target className="w-8 h-8 mb-2 text-[#5C3D2E]" /> },
@@ -9,10 +14,64 @@ const sections = [
   { path: 'valores', label: 'Valores', icon: <HeartHandshake className="w-8 h-8 mb-2 text-[#5C3D2E]" /> },
 ];
 
+const equipo = [
+  {
+    image: CarlosImage,
+    title: 'Carlos Mendoza',
+    role: 'Gerente General',
+    data: {
+      lugarNacimiento: 'Lima, Perú',
+      fechaNacimiento: '12/03/1985',
+      añosExperiencia: '10 años en gestión de restaurantes',
+      formación: 'Administración de Empresas - Universidad de Lima',
+      habilidadesClave: ['Liderazgo', 'Toma de decisiones', 'Estrategia empresarial'],
+    },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'añosExperiencia', 'formación', 'habilidadesClave'],
+  },
+  {
+    image: MarianaImage,
+    title: 'Mariana Torres',
+    role: 'Jefa de Cocina',
+    data: {
+      lugarNacimiento: 'Arequipa, Perú',
+      fechaNacimiento: '25/07/1990',
+      añosExperiencia: '8 años en cocina de comida rápida',
+      formación: 'Gastronomía - Instituto Gastronómico Peruano',
+      especialidades: ['Hamburguesas gourmet', 'Control de calidad de alimentos', 'Manejo de personal de cocina'],
+    },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'añosExperiencia', 'formación', 'especialidades'],
+  },
+  {
+    image: LuisImage,
+    title: 'Luis Ramírez',
+    role: 'Encargado de Marketing',
+    data: {
+      lugarNacimiento: 'Trujillo, Perú',
+      fechaNacimiento: '18/11/1992',
+      añosExperiencia: '5 años en marketing digital',
+      formación: 'Comunicación y Marketing - Universidad Nacional de Trujillo',
+      habilidadesClave: ['Campañas en redes sociales', 'Análisis de mercado', 'Creatividad publicitaria'],
+    },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'añosExperiencia', 'formación', 'habilidadesClave'],
+  },
+  {
+    image: SofiaImage,
+    title: 'Sofía Delgado',
+    role: 'Responsable de Logística',
+    data: {
+      lugarNacimiento: 'Cusco, Perú',
+      fechaNacimiento: '09/06/1988',
+      añosExperiencia: '7 años en logística y distribución',
+      formación: 'Ingeniería Industrial - Universidad Nacional de San Agustín',
+      habilidadesClave: ['Gestión de inventarios', 'Coordinación de proveedores', 'Optimización de rutas de entrega'],
+    },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'añosExperiencia', 'formación', 'habilidadesClave'],
+  },
+];
+
 function Nosotros() {
   return (
-    <div className="bg-[#FFF8DC] min-h-screen py-10 px-4">
-      <div className="container mx-auto">
+    <div className='max-w-7xl m-auto mt-8 mb-8'>
 
         {/* 🎬 Header con animación única */}
         <motion.header
@@ -74,49 +133,28 @@ function Nosotros() {
         >
           <h2 className="text-3xl font-bold text-yellow-600 text-center mb-10">Nuestro Equipo</h2>
 
-          <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-4">
-            {[
-              {
-                nombre: "Lucía Ramírez",
-                cargo: "Gerente General",
-                descripcion: "Lidera al equipo con visión estratégica, manteniendo altos estándares de calidad y servicio.",
-              },
-              {
-                nombre: "Carlos Gutiérrez",
-                cargo: "Chef Ejecutivo",
-                descripcion: "Creador de nuestras deliciosas hamburguesas, siempre innovando en sabor y presentación.",
-              },
-              {
-                nombre: "Andrea Torres",
-                cargo: "Cajera Principal",
-                descripcion: "Amable y eficiente, garantiza una atención rápida y cordial a todos nuestros clientes.",
-              },
-              {
-                nombre: "Diego Salinas",
-                cargo: "Repartidor Estrella",
-                descripcion: "Responsable de entregar tu pedido caliente y a tiempo, siempre con una sonrisa.",
-              },
-            ].map((persona, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {equipo.map((persona, i) => (
               <motion.div
-                key={persona.nombre}
+                key={i}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
-                transition={{ delay: index * 0.2, duration: 0.5 }}
-                className="bg-white rounded-2xl shadow-lg p-6 text-center border border-yellow-100"
+                transition={{ delay: i * 0.2, duration: 0.5 }}
               >
-                <div className="w-16 h-16 mx-auto mb-4 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                  {persona.nombre.split(" ")[0][0]}{persona.nombre.split(" ")[1][0]}
-                </div>
-                <h3 className="text-xl font-semibold text-[#5C3D2E]">{persona.nombre}</h3>
-                <p className="text-sm text-yellow-700 font-medium">{persona.cargo}</p>
-                <p className="text-sm text-gray-700 mt-2">{persona.descripcion}</p>
+                <RotatingCard
+                  key={i}
+                  image={persona.image}
+                  title={persona.title}
+                  role={persona.role}
+                  data={persona.data}
+                  showFields={persona.showFields}
+                />
               </motion.div>
             ))}
           </div>
         </motion.section>
       </div>
-    </div>
   );
 }
 

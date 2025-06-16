@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import './carrusel.css';
+import BannerCarousel from '../../components/BannerCarousel'
 
 function Menu() {
   const menus = [
@@ -40,8 +41,12 @@ function Menu() {
   );
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center text-yellow-600">Menú</h1>
+    <div className='max-w-7xl m-auto mt-8 mb-8'>
+      <h1 className="text-3xl font-bold mb-6 text-center text-yellow-600">Menú</h1>
+      <div className='my-8'>
+        <BannerCarousel />
+      </div>
+      <h2 className="text-3xl font-bold text-yellow-600 text-center m-8">Catálogo de Productos</h2>
       <div className="flex flex-col md:flex-row gap-6">
         {renderGrupo('Menús Armados', menus)}
         {renderGrupo('Hamburguesas', hamburguesas)}

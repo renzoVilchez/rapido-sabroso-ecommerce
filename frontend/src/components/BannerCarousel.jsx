@@ -14,21 +14,21 @@ const banners = [
 
 function BannerCarousel() {
   return (
-    <Swiper
-      modules={[Autoplay]}
-      autoplay={{ delay: 3000 }}
-      loop={true}
-    >
-      {banners.map(banner => (
-        <SwiperSlide key={banner.id}>
-          <img
-            src={banner.src}
-            alt={banner.alt}
-            className="w-full h-[400px] object-cover"
-          />
-        </SwiperSlide>
-      ))}
-    </Swiper>
+      <Swiper
+        modules={[Autoplay]}
+        autoplay={{ delay: 3000 }}
+        loop={true}
+      >
+        {banners.map(banner => (
+          <SwiperSlide key={banner.id}>
+            <img
+              src={banner.src}
+              alt={banner.alt}
+              className="w-[1200] h-[400px]"
+            />
+          </SwiperSlide>
+        ))}
+      </Swiper>
   );
 }
 

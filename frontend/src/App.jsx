@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Layout from './components/Layout';
+import LayoutNavideno from './components/LayoutNavideno/LayoutNavideno';
+
 import AdminLayout from './pages/Admin/AdminLayout';
 
 import Dashboard from './pages/Admin/Dashboard';
@@ -12,6 +14,7 @@ import Clientes from './pages/Admin/Clientes';
 import Admins from './pages/Admin/Administradores';
 import Reportes from './pages/Admin/Reportes';
 import Ajustes from './pages/Admin/Ajustes';
+import LoginAdmin from './pages/Admin/LoginAdmin';
 
 import Home from './pages/Home';
 
@@ -21,6 +24,7 @@ import BlogAcompanamientos from './pages/Blog/BlogAcompanamientos';
 import BlogBeneficios from './pages/Blog/BlogBeneficios';
 import BlogCuriosidades from './pages/Blog/BlogCuriosidades';
 import BlogNovedades from './pages/Blog/BlogNovedades';
+import Vlog from './pages/Vlog';
 import Contacto from './pages/Contacto';
 import Comprobante from './pages/Comprobante';
 import Nosotros from './pages/Nosotros/Index';
@@ -31,6 +35,7 @@ import NosotrosValores from './pages/Nosotros/NosotrosValores';
 import Ayuda from './pages/Ayuda/index';
 import AyudaManual from './pages/Ayuda/AyudaManual';
 import AyudaOpinion from './pages/Ayuda/AyudaOpinion';
+import AyudaPreguntas from './pages/Ayuda/AyudaPreguntas';
 import Carrito from './pages/Carrito';
 import Otros from './pages/Otros/Index';
 import OtrosFactura from './pages/Otros/OtrosFactura';
@@ -47,6 +52,7 @@ import NotFound from './pages/NotFound';
 import Menu from './pages/Menu/index';
 import MenuProductos from './pages/Menu/TipoProducto';
 import TipoMenu from './pages/Menu/TipoMenu';
+import ProductosProductos from './pages/Menu/Productos'
 
 import HistorialPedido from './pages/HistorialPedidos';
 
@@ -57,7 +63,7 @@ function App() {
       <Route path="/" element={<LandingPage />} />
 
       {/* Rutas con Layout Admin*/}
-      <Route path="/admin/" element={<Login />} />
+      <Route path="/admin/" element={<LoginAdmin />} />
       <Route element={<AdminLayout />}>
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/productos" element={<Productos />} />
@@ -77,6 +83,7 @@ function App() {
         <Route path="/menu" element={<Menu />} />
         <Route path="/menu/productos/tipo/:tipo" element={<MenuProductos />} />
         <Route path="menu/tipo/:tipo" element={<TipoMenu />} />
+        <Route path="/productos" element={<ProductosProductos />} />
 
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/historia" element={<BlogHistoria />} />
@@ -84,6 +91,8 @@ function App() {
         <Route path="/blog/beneficios" element={<BlogBeneficios />} />
         <Route path="/blog/curiosidades" element={<BlogCuriosidades />} />
         <Route path="/blog/novedades" element={<BlogNovedades />} />
+
+        <Route path="/vlog" element={<Vlog />} />
 
         <Route path="/contacto" element={<Contacto />} />
 
@@ -94,8 +103,9 @@ function App() {
         <Route path="/nosotros/valores" element={<NosotrosValores />} />
 
         <Route path="/ayuda/" element={<Ayuda />} />
-        <Route path="/ayuda/manual" element={<AyudaManual />} />
-        <Route path="/ayuda/opinion" element={<AyudaOpinion />} />
+        <Route path="/ayuda/manual-usuario" element={<AyudaManual />} />
+        <Route path="/ayuda/danos-tu-opinion" element={<AyudaOpinion />} />
+        <Route path="/ayuda/preguntas-frecuentes" element={<AyudaPreguntas />} />
 
         <Route path="/carrito" element={<Carrito />} />
 

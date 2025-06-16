@@ -1,4 +1,4 @@
-import BoletaImg from '../../assets/images/boleta.jfif';
+import BoletaImg from '../../assets/images/boleta.jpeg';
 
 function OtrosFactura() {
     return (

@@ -1,4 +1,4 @@
-import facturaImg from '../../assets/images/factura.jfif';
+import facturaImg from '../../assets/images/factura.png';
 
 function OtrosFactura() {
     return (

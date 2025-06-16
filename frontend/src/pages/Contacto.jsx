@@ -17,63 +17,75 @@ const companyInfo = {
 };
 
 const cards = [
-    {
-        image: RenzoImage,
-        title: 'Renzo Vilchez',
-        role: 'Administrador del Proyecto',
-        birthPlace: 'El Porvenir, Trujillo',
-        birthDate: '29/06/2005',
-        studyCenter: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
-        technologies: {
-            graphicDesign: ['Adobe Illustrator'],
-            videoEditing: ['Capcut'],
-            webDevelopment: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind', 'Bootstrap', 'Node.js'],
-        },
+  {
+    image: RenzoImage,
+    title: 'Renzo Vilchez',
+    role: 'Administrador del Proyecto',
+    data: {
+      lugarNacimiento: 'El Porvenir, Trujillo',
+      fechaNacimiento: '29/06/2005',
+      centroEstudios: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
+      tecnologias: {
+        disenoGrafico: ['Adobe Illustrator'],
+        edicionVideo: ['Capcut'],
+        desarrolloWeb: ['HTML', 'CSS', 'JavaScript', 'React', 'Tailwind', 'Bootstrap', 'Node.js'],
+      },
     },
-    {
-        image: AnthonyImage,
-        title: 'Anthony Herrera',
-        role: 'Programador del Proyecto',
-        birthPlace: 'Trujillo, Trujillo',
-        birthDate: '01/11/1999',
-        studyCenter: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
-        technologies: {
-            graphicDesign: ['Corel Draw', 'Adobe Illustrator', 'PhotoShop'],
-            videoEditing: ['Capcut'],
-            webDevelopment: ['HTML', 'CSS', 'JavaScript', 'PHP', 'Bootstrap'],
-        },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'centroEstudios', 'tecnologias'],
+  },
+  {
+    image: AnthonyImage,
+    title: 'Anthony Herrera',
+    role: 'Programador del Proyecto',
+    data: {
+      lugarNacimiento: 'Trujillo, Trujillo',
+      fechaNacimiento: '01/11/1999',
+      centroEstudios: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
+      tecnologias: {
+        disenoGrafico: ['Corel Draw', 'Adobe Illustrator', 'PhotoShop'],
+        edicionVideo: ['Capcut'],
+        desarrolloWeb: ['HTML', 'CSS', 'JavaScript', 'PHP', 'Bootstrap'],
+      },
     },
-    {
-        image: KatterynImage,
-        title: 'Katteryn Pomaina',
-        role: 'Diseñadora del Proyecto',
-        birthPlace: 'La Esperanza, Trujillo',
-        birthDate: '14/05/2006',
-        studyCenter: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
-        technologies: {
-            graphicDesign: ['Corel DRAW', 'Adobe Illustrator', 'Adobe Photoshop'],
-            videoEditing: ['Capcut'],
-            webDevelopment: ['HTML', 'CSS', 'React', 'PHP', 'Bootstrap'],
-        },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'centroEstudios', 'tecnologias'],
+  },
+  {
+    image: KatterynImage,
+    title: 'Katteryn Pomaina',
+    role: 'Diseñadora del Proyecto',
+    data: {
+      lugarNacimiento: 'La Esperanza, Trujillo',
+      fechaNacimiento: '14/05/2006',
+      centroEstudios: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
+      tecnologias: {
+        disenoGrafico: ['Corel DRAW', 'Adobe Illustrator', 'Adobe Photoshop'],
+        edicionVideo: ['Capcut'],
+        desarrolloWeb: ['HTML', 'CSS', 'React', 'PHP', 'Bootstrap'],
+      },
     },
-    {
-        image: RichardImage,
-        title: 'Richard Terrones',
-        role: 'Tester del Proyecto',
-        birthPlace: 'Trujillo, Trujillo',
-        birthDate: '13/10/2002',
-        studyCenter: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
-        technologies: {
-            graphicDesign: ['Adobe Illustrator'],
-            videoEditing: ['Capcut'],
-            webDevelopment: ['HTML', 'CSS', 'JavaScript'],
-        },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'centroEstudios', 'tecnologias'],
+  },
+  {
+    image: RichardImage,
+    title: 'Richard Terrones',
+    role: 'Tester del Proyecto',
+    data: {
+      lugarNacimiento: 'Trujillo, Trujillo',
+      fechaNacimiento: '13/10/2002',
+      centroEstudios: 'Instituto Educativo Superior Tecnológico Público "Trujillo"',
+      tecnologias: {
+        disenoGrafico: ['Adobe Illustrator'],
+        edicionVideo: ['Capcut'],
+        desarrolloWeb: ['HTML', 'CSS', 'JavaScript'],
+      },
     },
+    showFields: ['lugarNacimiento', 'fechaNacimiento', 'centroEstudios', 'tecnologias'],
+  },
 ];
 
 function Contacto() {
     return (
-        <div className="max-w-6xl mx-auto px-4 mt-8 mb-16">
+        <div className='max-w-7xl m-auto mt-8 mb-8'>
             {/* Información de la empresa */}
             <section className="bg-[#0d1b2a] text-white p-6 md:p-10 rounded-3xl shadow-xl shadow-yellow-500 mb-12">
                 <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 text-center mb-8">Contáctanos</h2>
@@ -118,16 +130,14 @@ function Contacto() {
             <section>
                 <h3 className="text-2xl font-bold text-center mb-6">Equipo de Desarrollo del Proyecto</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                    {cards.map((card, index) => (
+                    {cards.map((card, i) => (
                         <RotatingCard
-                            key={index}
+                            key={i}
                             image={card.image}
                             title={card.title}
                             role={card.role}
-                            birthPlace={card.birthPlace}
-                            birthDate={card.birthDate}
-                            studyCenter={card.studyCenter}
-                            technologies={card.technologies}
+                            data={card.data}
+                            showFields={card.showFields}
                         />
                     ))}
                 </div>

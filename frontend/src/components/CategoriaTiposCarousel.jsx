@@ -3,7 +3,18 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { Navigation } from "swiper/modules";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
+function normalizeString(str) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
 
 const CategoriaTiposCarousel = () => {
   const navigate = useNavigate();
@@ -42,12 +53,14 @@ const CategoriaTiposCarousel = () => {
 
   return (
     <div className="space-y-10 px-4 py-8">
+      <h2 className="text-4xl font-bold text-yellow-600 text-center">Conoce Las diferentes catergorias de productos</h2>
       {error ? (
         <p className="text-center text-red-600 text-lg font-semibold">{error}</p>
       ) : (
+
         categoriasPorTipo.map((categoria) => (
           <div key={categoria.id_categoria}>
-            <h2 className="text-2xl font-bold mb-8 text-center">{categoria.nombre}</h2>
+            <h2 className="text-2xl font-bold mb-8 text-center text-yellow-600">{categoria.nombre}</h2>
 
             <Swiper
               slidesPerView={2}
@@ -64,21 +77,23 @@ const CategoriaTiposCarousel = () => {
               {categoria.tipos.map((tipo) => (
                 <SwiperSlide key={tipo.id_tipo_producto}>
                   <div
-                    onClick={() => navigate(`/menu?tipo=${tipo.id_tipo_producto}`)}
-                    className="bg-yellow-500 text-white rounded-2xl shadow-md p-4 h-full text-center cursor-pointer hover:shadow-2xl transition"
+                    className="bg-yellow-500 text-white rounded-2xl shadow-md p-2 h-full text-center cursor-pointer hover:shadow-2xl transition"
                   >
-                    <div className="overflow-hidden rounded-xl mb-4">
-                      <img
-                        src={
-                          tipo.imagen
-                            ? `http://localhost:5000/images/${tipo.imagen}`
-                            : "https://placehold.co/300x200.png?text=Sin+imagen"
-                        }
-                        alt={tipo.nombre}
-                        className="w-full h-48 object-cover rounded-xl transform hover:scale-110 transition duration-300"
-                      />
-                    </div>
-                    <h3 className="text-lg font-semibold">{tipo.nombre}</h3>
+                    <Link
+                      to={`/menu/productos/tipo/${normalizeString(tipo.nombre)}`}>
+                      <div className="overflow-hidden rounded-xl mb-4">
+                        <img
+                          src={
+                            tipo.imagen
+                              ? `http://localhost:5000/images/${tipo.imagen}`
+                              : "https://placehold.co/300x200.png?text=Sin+imagen"
+                          }
+                          alt={tipo.nombre}
+                          className="w-full h-full rounded-xl transform hover:scale-110 transition duration-300"
+                        />
+                      </div>
+                      <h3 className="text-lg font-semibold text-black">{tipo.nombre}</h3>
+                    </Link>
                   </div>
                 </SwiperSlide>
               ))}

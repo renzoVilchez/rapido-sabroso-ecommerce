@@ -1,4 +1,5 @@
 import db from './db.js';
+import bcrypt from 'bcrypt';
 
 const Admin = {
   getAll: async () => {
@@ -8,6 +9,22 @@ const Admin = {
 
   getById: async (id) => {
     const [rows] = await db.execute('SELECT * FROM admin WHERE idAdmin = ?', [id]);
+    return rows[0];
+  },
+
+  login: async (email, password) => {
+    const admin = await Admin.getByCorreo(email);
+    if (!admin) return null;
+
+    const match = await bcrypt.compare(password, admin.password);
+    if (!match) return null;
+
+    const { password: _, ...safeData } = admin;
+    return safeData;
+  },
+
+  getByCorreo: async (email) => {
+    const [rows] = await db.execute('SELECT * FROM admin WHERE email = ?', [email]);
     return rows[0];
   },
 

@@ -56,47 +56,61 @@ function Navbar() {
         </div>
 
         <div className="hidden md:flex gap-6 text-base font-medium text-gray-700">
-          <Link to="/home" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Inicio</Link>
+          <Link to="/home" className="hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3 rounded-2xl">Inicio</Link>
 
           <div className="relative group">
-            <Link to="/nosotros" className="hover:text-yellow-600 hover:scale-110 transition duration-300 inline-block">Nosotros</Link>
+            <Link
+              to="/nosotros"
+              className="group-hover:bg-amber-900 group-hover:text-white group-hover:scale-110 hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3 inline-block rounded-2xl"
+            >
+              Nosotros
+            </Link>
             <ul className="absolute left-0 top-full w-48 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
-              <li><Link to="/nosotros/mision" className="block px-4 py-2 hover:bg-yellow-100">Misión</Link></li>
-              <li><Link to="/nosotros/vision" className="block px-4 py-2 hover:bg-yellow-100">Visión</Link></li>
-              <li><Link to="/nosotros/objetivos" className="block px-4 py-2 hover:bg-yellow-100">Objetivos</Link></li>
-              <li><Link to="/nosotros/valores" className="block px-4 py-2 hover:bg-yellow-100">Valores</Link></li>
+              <li><Link to="/nosotros/mision" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Misión</Link></li>
+              <li><Link to="/nosotros/vision" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Visión</Link></li>
+              <li><Link to="/nosotros/objetivos" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Objetivos</Link></li>
+              <li><Link to="/nosotros/valores" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Valores</Link></li>
             </ul>
           </div>
 
           <div className="relative group">
-            <Link to="/menu" className="hover:text-yellow-600 hover:scale-110 transition duration-300 inline-block cursor-pointer">Menú</Link>
+            <Link
+              to="/menu"
+              className="group-hover:bg-amber-900 group-hover:text-white group-hover:scale-110 hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3 inline-block rounded-2xl"
+            >
+              Menú
+            </Link>
 
             <ul className="absolute left-0 top-full w-48 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
               {tiposMenuUnicos.map((tipo) => (
                 <li key={tipo}>
                   <Link
                     to={`/menu/tipo/${normalizeString(tipo)}`}
-                    className="block px-4 py-2 hover:bg-yellow-100 capitalize"
+                    className="block px-4 py-2 hover:bg-amber-900 hover:text-white capitalize"
                     onClick={() => setMenuOpen(false)}
                   >
                     {`Menú ${tipo.replace('_', ' ')}`}
                   </Link>
                 </li>
               ))}
-              <li className="relative group">
+
+              {/* Submenú anidado para productos */}
+              <li className="relative group/submenu">
                 <Link
                   to="/productos"
-                  className="block px-4 py-2 hover:bg-yellow-100"
+                  className="block px-4 py-2 hover:bg-amber-900 hover:text-white group-hover/submenu:bg-amber-900 group-hover/submenu:text-white"
                   onClick={() => setMenuOpen(false)}
                 >
                   Productos
                 </Link>
-                <ul className="absolute left-full top-0 ml-1 w-48 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
+
+                <ul className="absolute top-0 left-full w-48 bg-white shadow-lg rounded-md opacity-0 group-hover/submenu:opacity-100 pointer-events-none group-hover/submenu:pointer-events-auto transition duration-200 z-20 ml-[-1]">
+
                   {tiposProductoUnicos.map((tipo) => (
                     <li key={tipo}>
                       <Link
                         to={`/menu/productos/tipo/${normalizeString(tipo)}`}
-                        className="block px-4 py-2 hover:bg-yellow-100 capitalize"
+                        className="block px-4 py-2 hover:bg-amber-900 hover:text-white capitalize"
                         onClick={() => setMenuOpen(false)}
                       >
                         {tipo.replace('_', ' ')}
@@ -108,30 +122,32 @@ function Navbar() {
             </ul>
           </div>
 
-          <Link to="/blog" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Blog</Link>
-          <Link to="/contacto" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Contáctanos</Link>
+          <Link to="/blog" className="hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3  rounded-2xl">Blog</Link>
+          <Link to="/vlog" className="hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3  rounded-2xl">Vlog</Link>
+          <Link to="/contacto" className="hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3  rounded-2xl">Contáctanos</Link>
 
           <div className="relative group">
-            <Link to="/ayuda" className="hover:text-yellow-600 hover:scale-110 transition duration-300 inline-block">Ayuda</Link>
+            <Link to="/ayuda" className="group-hover:bg-amber-900 group-hover:text-white group-hover:scale-110 hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3 inline-block rounded-2xl">Ayuda</Link>
             <ul className="absolute left-0 top-full w-64 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
-              <li><Link to="/ayuda/manual" className="block px-4 py-2 hover:bg-yellow-100">Manual de Usuario</Link></li>
-              <li><Link to="/ayuda/opinion" className="block px-4 py-2 hover:bg-yellow-100">Danos tu opinión</Link></li>
+              <li><Link to="/ayuda/manual-usuario" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Manual de Usuario</Link></li>
+              <li><Link to="/ayuda/danos-tu-opinion" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Danos tu opinión</Link></li>
+              <li><Link to="/ayuda/preguntas-frecuentes" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Preguntas Frecuentes</Link></li>
             </ul>
           </div>
 
           <div className="relative group">
-            <Link to="/otros" className="hover:text-yellow-600 hover:scale-110 transition duration-300 inline-block">Otros</Link>
+            <Link to="/otros" className="group-hover:bg-amber-900 group-hover:text-white group-hover:scale-110 hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3 inline-block rounded-2xl">Galería</Link>
             <ul className="absolute left-0 top-full w-64 bg-white shadow-lg rounded-md opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition duration-200 z-10">
-              <li><Link to="/otros/hojas-membretadas" className="block px-4 py-2 hover:bg-yellow-100">Hojas membretadas</Link></li>
-              <li><Link to="/otros/boleta" className="block px-4 py-2 hover:bg-yellow-100">Boleta de venta</Link></li>
-              <li><Link to="/otros/factura" className="block px-4 py-2 hover:bg-yellow-100">Factura</Link></li>
-              <li><Link to="/otros/videos" className="block px-4 py-2 hover:bg-yellow-100">Videos</Link></li>
-              <li><Link to="/otros/tarjetas" className="block px-4 py-2 hover:bg-yellow-100">Tarjetas</Link></li>
-              <li><Link to="/otros/logos" className="block px-4 py-2 hover:bg-yellow-100">Logos</Link></li>
+              <li><Link to="/otros/hojas-membretadas" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Hojas membretadas</Link></li>
+              <li><Link to="/otros/boleta" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Boleta de venta</Link></li>
+              <li><Link to="/otros/factura" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Factura</Link></li>
+              <li><Link to="/otros/videos" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Videos</Link></li>
+              <li><Link to="/otros/tarjetas" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Tarjetas</Link></li>
+              <li><Link to="/otros/logos" className="block px-4 py-2 hover:bg-amber-900 hover:text-white">Logos</Link></li>
             </ul>
           </div>
 
-          <Link to="/historial-pedidos" className="hover:text-yellow-600 hover:scale-110 transition duration-300">Historial de Pedidos</Link>
+          <Link to="/historial-pedidos" className="hover:bg-amber-900 hover:text-white hover:scale-110 transition duration-300 p-3  rounded-2xl">Historial de Pedidos</Link>
         </div>
 
         <div className="flex items-center gap-4">
@@ -174,6 +190,7 @@ function Navbar() {
           <Link to="/ayuda" onClick={toggleMenu}>Ayuda</Link>
           <Link to="/menu" onClick={toggleMenu}>Menú</Link>
           <Link to="/otros" onClick={toggleMenu}>Otros</Link>
+          <Link to="/historial-pedidos" onClick={toggleMenu}>Historial de pedidos</Link>
           <Link to="/carrito" onClick={toggleMenu}>Carrito</Link>
         </div>
       )}

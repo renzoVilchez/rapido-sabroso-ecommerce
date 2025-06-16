@@ -6,7 +6,7 @@ const router = express.Router();
 // 1. Obtener todos los clientes
 router.get('/', clienteController.getAll);
 
-// 2. Obtener un cliente por correo (útil para login o búsqueda)
+// 2. Obtener un cliente por correo
 router.get('/correo/:correo', clienteController.getByCorreo);
 
 // 3. Obtener un cliente por ID

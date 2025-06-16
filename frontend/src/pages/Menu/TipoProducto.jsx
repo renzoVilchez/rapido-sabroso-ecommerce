@@ -96,7 +96,7 @@ function TipoProducto() {
   if (loading) return <p>Cargando productos...</p>;
 
   return (
-    <div className="bg-white min-h-screen p-6">
+    <div className='max-w-7xl m-auto mt-8 mb-8'>
       <h1 className="text-3xl font-bold mb-8 text-center text-yellow-600">{tipoOriginal}</h1>
 
       {error && (
@@ -109,7 +109,7 @@ function TipoProducto() {
         <p className="text-center text-gray-500">No hay productos para esta categoría.</p>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {productosFiltrados.map(producto => (
           <ProductCard
             key={producto.idProducto}

@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { GlobalContext } from '../context/GlobalContext';
-
+import fondoSilueta from '../assets/images/saturacion.jpg';
 const Login = () => {
   const navigate = useNavigate();
   const { setIsLoggedIn } = useContext(GlobalContext);
@@ -54,54 +54,60 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div
+      className="flex justify-center items-center bg-cover bg-center h-screen"
+      style={{ backgroundImage: `url(${fondoSilueta})` }}
+    >
       <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+        className="backdrop-blur-md bg-white/20 border border-yellow-400/20 p-8 rounded-2xl shadow-2xl w-full max-w-md text-yellow-100"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Iniciar Sesión</h2>
+        <h2 className="text-3xl font-bold mb-6 text-center text-white">Iniciar Sesión</h2>
 
         {/* Correo */}
         <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Correo electrónico</label>
+          <label className="block mb-1 text-sm text-yellow-200">Correo electrónico</label>
           <input
             type="email"
             name="correo"
             value={formData.correo}
             onChange={handleChange}
             required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-yellow-300"
+            placeholder="correo@ejemplo.com"
           />
         </div>
 
         {/* Password */}
         <div className="mb-6">
-          <label className="block text-gray-600 mb-1">Contraseña</label>
+          <label className="block mb-1 text-sm text-yellow-200">Contraseña</label>
           <input
             type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-yellow-300"
+            placeholder="••••••••"
           />
         </div>
 
         {/* Mostrar error si hay */}
         {error && (
-          <div className="mb-4 text-red-500 text-sm text-center">{error}</div>
+          <div className="mb-4 text-red-400 text-sm text-center">{error}</div>
         )}
 
         {/* Botón */}
         <button
           type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md transition duration-300"
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-2 rounded-md transition duration-300"
         >
           Entrar
         </button>
-        <p className="mt-4 text-center text-sm text-gray-600">
+
+        <p className="mt-4 text-center text-sm text-yellow-200">
           ¿No tienes una cuenta?{' '}
-          <Link to="/register" className="text-blue-500 hover:underline">
+          <Link to="/register" className="text-yellow-300 hover:underline">
             Dale clic aquí
           </Link>
         </p>

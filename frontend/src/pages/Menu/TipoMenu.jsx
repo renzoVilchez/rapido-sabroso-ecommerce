@@ -70,11 +70,11 @@ function TipoMenu() {
   }
 
   return (
-    <div className="px-4 py-6">
+    <div className='max-w-7xl m-auto mt-8 mb-8 px-4'>
       <h1 className="text-2xl font-bold mb-4 text-yellow-700 text-center">
         Menús {tipo}
       </h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="flex flex-wrap justify-center gap-6">
         {menusFiltrados.map(menu => (
           <MenuCard
             key={menu.id_menu}

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import fondoSilueta from '../assets/images/saturacion.jpg';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -110,179 +111,199 @@ const Register = () => {
 
 
   return (
-    <div className="flex justify-center flex-col items-center min-h-screen bg-gray-100">
-      <form
-        onSubmit={handleRegister}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md"
+    <div
+      style={{ backgroundImage: `url(${fondoSilueta})`, backgroundSize: 'cover'}}
+    >
+      <div className="flex justify-center flex-col items-center"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Registro de Cliente</h2>
-
-        {/* Nombre */}
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Nombre</label>
-          <input
-            type="text"
-            name="nombre"
-            value={formData.nombre}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-        {/* Apellidos */}
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Apellidos</label>
-          <input
-            type="text"
-            name="apellidos"
-            value={formData.apellidos}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-        {/* Correo */}
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Correo electrónico</label>
-          <input
-            type="email"
-            name="correo"
-            value={formData.correo}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-        {/* Password */}
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Contraseña</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-        {/* Tipo de persona */}
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-1">Tipo de persona</label>
-          <select
-            name="tipoPersona"
-            value={formData.tipoPersona}
-            onChange={handleChange}
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="natural">Natural</option>
-            <option value="juridica">Jurídica</option>
-          </select>
-        </div>
-
-        {/* Documento */}
-        <div className="mb-4">
-          <label className="block text-gray-600 mb-1">
-            {formData.tipoPersona === 'natural' ? 'DNI' : 'RUC'}
-          </label>
-          <input
-            type="text"
-            name="documento"
-            value={formData.documento}
-            onChange={(e) => {
-              const { value } = e.target;
-              const maxLength = formData.tipoPersona === 'natural' ? 8 : 11;
-              if (/^\d*$/.test(value) && value.length <= maxLength) {
-                setFormData((prev) => ({ ...prev, documento: value }));
-              }
-            }}
-            required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-
-        </div>
-
-        {/* Razón Social (solo para jurídica) */}
-        {formData.tipoPersona === 'juridica' && (
-          <>
-            <div className="mb-4">
-              <label className="block text-gray-600 mb-1">Razón Social</label>
-              <input
-                type="text"
-                name="razonSocial"
-                value={formData.razonSocial}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-
-            {/* Dirección Fiscal */}
-            <div className="mb-4">
-              <label className="block text-gray-600 mb-1">Dirección Fiscal</label>
-              <input
-                type="text"
-                name="direccionFiscal"
-                value={formData.direccionFiscal}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-          </>
-        )}
-
-        {/* Dirección de Envío */}
-        <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-2">Dirección de Envío</h3>
-          <label className="block text-gray-600 mb-1">Distrito</label>
-          <select
-            name="distrito"
-            value={formData.distrito}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="">Selecciona un distrito</option>
-            <option value="Trujillo">Trujillo</option>
-            <option value="La Esperanza">La Esperanza</option>
-            <option value="Florencia de Mora">Florencia de Mora</option>
-            <option value="El Porvenir">El Porvenir</option>
-            <option value="Huanchaco">Huanchaco</option>
-            <option value="Víctor Larco">Víctor Larco</option>
-            <option value="Laredo">Laredo</option>
-            <option value="Moche">Moche</option>
-            <option value="Salaverry">Salaverry</option>
-          </select>
-        </div>
-
-        <div className="mb-6">
-          <label className="block text-gray-600 mb-1">Calle / Dirección exacta</label>
-          <input
-            type="text"
-            name="calle"
-            value={formData.calle}
-            onChange={handleChange}
-            required
-            className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-        </div>
-
-
-        {/* Botón */}
-        <button
-          type="submit"
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-md transition duration-300"
+        <form
+          onSubmit={handleRegister}
+          className="backdrop-blur-md bg-white/30 border border-yellow-400/20 p-8 rounded-2xl shadow-2xl w-full max-w-md text-yellow-100 my-8"
         >
-          Registrarse
-        </button>
-      </form>
-      {error && (
-        <div className="mb-4 text-red-600 bg-red-100 border border-red-400 p-2 rounded">
-          {error}
-        </div>
-      )}
+          <h2 className="text-3xl font-bold mb-6 text-center text-white">Registro de Cliente</h2>
+
+          {/* Nombre */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-yellow-200">Nombre</label>
+            <input
+              type="text"
+              name="nombre"
+              value={formData.nombre}
+              onChange={handleChange}
+              required
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-yellow-300"
+              placeholder="Juan"
+            />
+          </div>
+
+          {/* Apellidos */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-yellow-200">Apellidos</label>
+            <input
+              type="text"
+              name="apellidos"
+              value={formData.apellidos}
+              onChange={handleChange}
+              required
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-yellow-300"
+              placeholder="Pérez García"
+            />
+          </div>
+
+          {/* Correo */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-yellow-200">Correo electrónico</label>
+            <input
+              type="email"
+              name="correo"
+              value={formData.correo}
+              onChange={handleChange}
+              required
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-yellow-300"
+              placeholder="correo@ejemplo.com"
+            />
+          </div>
+
+          {/* Password */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-yellow-200">Contraseña</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-yellow-300"
+              placeholder="••••••••"
+            />
+          </div>
+
+          {/* Tipo de persona */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-yellow-200">Tipo de persona</label>
+            <select
+              name="tipoPersona"
+              value={formData.tipoPersona}
+              onChange={handleChange}
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            >
+              <option value="natural" className='text-black'>Natural</option>
+              <option value="juridica" className='text-black'>Jurídica</option>
+            </select>
+          </div>
+
+          {/* Documento */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-yellow-200">
+              {formData.tipoPersona === 'natural' ? 'DNI' : 'RUC'}
+            </label>
+            <input
+              type="text"
+              name="documento"
+              value={formData.documento}
+              onChange={(e) => {
+                const { value } = e.target;
+                const maxLength = formData.tipoPersona === 'natural' ? 8 : 11;
+                if (/^\d*$/.test(value) && value.length <= maxLength) {
+                  setFormData((prev) => ({ ...prev, documento: value }));
+                }
+              }}
+              required
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            />
+          </div>
+
+          {/* Razón Social y Dirección Fiscal */}
+          {formData.tipoPersona === 'juridica' && (
+            <>
+              <div className="mb-4">
+                <label className="block mb-1 text-sm text-yellow-200">Razón Social</label>
+                <input
+                  type="text"
+                  name="razonSocial"
+                  value={formData.razonSocial}
+                  onChange={handleChange}
+                  className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block mb-1 text-sm text-yellow-200">Dirección Fiscal</label>
+                <input
+                  type="text"
+                  name="direccionFiscal"
+                  value={formData.direccionFiscal}
+                  onChange={handleChange}
+                  className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                />
+              </div>
+            </>
+          )}
+
+          {/* Dirección de Envío - Distrito */}
+          <div className="mb-4">
+            <label className="block mb-1 text-sm text-yellow-200">Distrito</label>
+            <select
+              name="distrito"
+              value={formData.distrito}
+              onChange={handleChange}
+              required
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            >
+              <option value="" className='text-black'>Selecciona un distrito</option>
+              <option value="Trujillo" className='text-black'>Trujillo</option>
+              <option value="La Esperanza" className='text-black'>La Esperanza</option>
+              <option value="Florencia de Mora" className='text-black'>Florencia de Mora</option>
+              <option value="El Porvenir" className='text-black'>El Porvenir</option>
+              <option value="Huanchaco" className='text-black' >Huanchaco</option>
+              <option value="Víctor Larco" className='text-black'>Víctor Larco</option>
+              <option value="Laredo" className='text-black'>Laredo</option>
+              <option value="Moche" className='text-black'>Moche</option>
+              <option value="Salaverry" className='text-black'>Salaverry</option>
+            </select>
+          </div>
+
+          {/* Dirección de Envío - Calle */}
+          <div className="mb-6">
+            <label className="block mb-1 text-sm text-yellow-200">Calle / Dirección exacta</label>
+            <input
+              type="text"
+              name="calle"
+              value={formData.calle}
+              onChange={handleChange}
+              required
+              className="w-full p-2 bg-yellow-100/10 text-yellow-100 border border-yellow-400/30 rounded-md focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-yellow-300"
+              placeholder="Av. Principal 123"
+            />
+          </div>
+
+          {/* Mostrar error si hay */}
+          {error && (
+            <div className="mb-4 text-red-400 text-sm text-center">{error}</div>
+          )}
+
+          {/* Botón */}
+          <button
+            type="submit"
+            className="w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold py-2 rounded-md transition duration-300"
+          >
+            Registrarse
+          </button>
+
+          <p className="mt-4 text-center text-sm text-yellow-200">
+            ¿Ya tienes una cuenta?{' '}
+            <Link to="/login" className="text-yellow-300 hover:underline">
+              Inicia sesión aquí
+            </Link>
+          </p>
+        </form>
+
+        {error && (
+          <div className="mb-4 text-red-600 bg-red-100 border border-red-400 p-2 rounded">
+            {error}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

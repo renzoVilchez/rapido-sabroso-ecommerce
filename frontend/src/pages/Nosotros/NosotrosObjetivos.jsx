@@ -2,7 +2,7 @@ import objetivoImagen from '../../assets/images/objetivoImagen.jpg';
 
 function NosotrosObjetivos() {
   return (
-    <div className="container max-w-6xl mx-auto my-12 px-4">
+    <div className='max-w-7xl m-auto mt-8 mb-8'>
       {/* Título principal */}
       <header className="text-center mb-12 px-4">
         <h1 className="text-4xl md:text-5xl font-bold text-yellow-600 drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]">
